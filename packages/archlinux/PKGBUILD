@@ -8,6 +8,10 @@ pkgdesc="Cross-platform tool that generates executable scripts to launch video f
 url="https://github.com/${releaser}/media-launcher"
 license=("MIT")
 arch=('x86_64')
+optdepends=(
+    'mpv: Play generated scripts with mpv (default player)'
+    'vlc: Play generated scripts with VLC'
+)
 
 source=(
     "${pkgname}::https://github.com/${releaser}/${pkgname}/releases/download/${pkgver}/media-launcher.elf"

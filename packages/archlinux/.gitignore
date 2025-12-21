@@ -1,4 +1,5 @@
 /pkg
 /src
-/media-launcher.elf
+/media-launcher
+/*.pkg.tar.*
 /.idea
