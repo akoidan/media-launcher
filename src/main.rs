@@ -6,6 +6,8 @@ use std::{
     sync::OnceLock,
 };
 
+use rfd::FileDialog;
+
 use anyhow::{anyhow, Context, Result};
 use clap::Parser;
 use regex::Regex;
@@ -41,7 +43,20 @@ struct EpisodeFiles {
     video: Option<PathBuf>,
 }
 
+fn pick_directory() -> Result<PathBuf> {
+    let path = FileDialog::new()
+        .set_directory("C:\\")
+        .pick_folder()
+        .ok_or_else(|| anyhow!("No directory selected"))?;
+    
+    Ok(path)
+}
+
 fn validate_root_dir(s: &str) -> std::result::Result<PathBuf, String> {
+    if s == "pick" {
+        return pick_directory().map_err(|e| e.to_string());
+    }
+    
     let p = PathBuf::from(s);
     if !p.exists() {
         return Err(format!("Path does not exist: {s}"));
