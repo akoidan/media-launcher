@@ -189,35 +189,13 @@ fn run_fixture(fixture_path: &Path, fixture_json: &str) {
     assert_fixture_writes(fixture_path, expected, &actual);
 }
 
-#[test]
-fn golden_fixtures() {
+fn run_fixture_file(rel_path: &str) {
     let _guard = env_lock().lock().unwrap();
 
-    let fixtures_dir = PathBuf::from(env!("CARGO_MANIFEST_DIR"))
-        .join("tests")
-        .join("fixtures");
-    let mut fixtures = std::fs::read_dir(&fixtures_dir)
-        .unwrap_or_else(|e| {
-            panic!(
-                "Failed to read fixtures dir {}: {e}",
-                fixtures_dir.display()
-            )
-        })
-        .filter_map(|e| e.ok())
-        .map(|e| e.path())
-        .filter(|p| p.extension().and_then(|s| s.to_str()) == Some("json"))
-        .collect::<Vec<_>>();
-
-    fixtures.sort();
-    assert!(
-        !fixtures.is_empty(),
-        "No fixtures found in {}",
-        fixtures_dir.display()
-    );
-
-    for fixture_path in fixtures {
-        let json = std::fs::read_to_string(&fixture_path)
-            .unwrap_or_else(|e| panic!("Failed to read fixture {}: {e}", fixture_path.display()));
-        run_fixture(&fixture_path, &json);
-    }
+    let fixture_path = PathBuf::from(env!("CARGO_MANIFEST_DIR")).join(rel_path);
+    let json = std::fs::read_to_string(&fixture_path)
+        .unwrap_or_else(|e| panic!("Failed to read fixture {}: {e}", fixture_path.display()));
+    run_fixture(&fixture_path, &json);
 }
+
+include!(concat!(env!("OUT_DIR"), "/generated_fixture_tests.rs"));
