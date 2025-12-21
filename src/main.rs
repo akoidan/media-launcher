@@ -1,6 +1,6 @@
 use std::{fs, path::PathBuf};
 
-use anyhow::{Context, Result};
+use anyhow::Result;
 use clap::Parser;
 
 mod media_scan;
@@ -22,13 +22,10 @@ struct Args {
 fn main() -> Result<()> {
     let args = Args::parse();
 
-    let selected_root_dir = match args.root_dir {
-        Some(p) => p,
+    let root_dir = match args.root_dir {
+        Some(p) => fs::canonicalize(p)?,
         None => media_scan::pick_directory()?,
     };
-
-    let root_dir = fs::canonicalize(&selected_root_dir)
-        .with_context(|| format!("Failed to resolve {}", selected_root_dir.display()))?;
 
     let player = players::resolve_player(args.player)?;
 
