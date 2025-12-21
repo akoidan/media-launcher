@@ -40,12 +40,7 @@ fn main() -> Result<()> {
             }
         };
 
-        let script_path = root_dir.join(format!("{:02}.{}", episode, os::script_ext()));
-        fs::write(&script_path, open_cmd)?;
-
-        os::set_script_permissions(&script_path)?;
-
-        println!("{}", script_path.display());
+        media_scan::write_episode_script(&root_dir, episode, &open_cmd)?;
     }
 
     Ok(())

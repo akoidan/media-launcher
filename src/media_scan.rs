@@ -129,6 +129,14 @@ pub fn scan_dir(dir_path: &Path) -> Result<(BTreeMap<u32, EpisodeFiles>, Option<
     Ok((structure, font_dir))
 }
 
+pub fn write_episode_script(root_dir: &Path, episode: u32, open_cmd: &str) -> Result<()> {
+    let script_path = root_dir.join(format!("{:02}.{}", episode, os::script_ext()));
+    fs::write(&script_path, open_cmd)?;
+    os::set_script_permissions(&script_path)?;
+    println!("{}", script_path.display());
+    Ok(())
+}
+
 fn read_dir_recursive(
     dir_path: &Path,
     structure: &mut BTreeMap<u32, EpisodeFiles>,
