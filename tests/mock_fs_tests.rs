@@ -150,17 +150,11 @@ fn golden_fixture_solo_leveling() {
     ))
     .unwrap();
 
-    let expected = {
-        #[cfg(windows)]
-        {
-            &input.expected_windows_writes
-        }
+    #[cfg(windows)]
+    let expected = &input.expected_windows_writes;
 
-        #[cfg(not(windows))]
-        {
-            &input.expected_unix_writes
-        }
-    };
+    #[cfg(not(windows))]
+    let expected = &input.expected_unix_writes;
 
     let mut fs = MockFs::default();
     let root = PathBuf::from(&input.root);

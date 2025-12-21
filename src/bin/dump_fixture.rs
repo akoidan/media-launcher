@@ -66,9 +66,20 @@ fn rel_parts(root: &Path, full: &Path) -> Result<Vec<String>> {
     Ok(parts)
 }
 
-fn rel_key_for_expected(root: &Path, full: &Path, prefix: &str) -> Result<String> {
+fn expected_key_abs(root: &Path, full: &Path, sep: char, normalize_root_seps: bool) -> Result<String> {
     let parts = rel_parts(root, full)?;
-    Ok(format!("{prefix}/{}", parts.join("/")))
+
+    let mut root_s = normalize_root_string(root);
+    if normalize_root_seps {
+        root_s = root_s.replace('\\', "/");
+    }
+
+    let rel = parts.join(&sep.to_string());
+    if root_s.ends_with(sep) {
+        Ok(format!("{root_s}{rel}"))
+    } else {
+        Ok(format!("{root_s}{sep}{rel}"))
+    }
 }
 
 #[derive(Debug, Serialize, Deserialize)]
@@ -130,7 +141,7 @@ fn main() -> Result<()> {
             let ext = ext.to_ascii_lowercase();
 
             if ext == "cmd" {
-                let key = rel_key_for_expected(&root, &path, "root")?;
+                let key = expected_key_abs(&root, &path, '\\', false)?;
                 let contents = fs::read_to_string(&path)
                     .with_context(|| format!("Failed to read {}", path.display()))?;
                 expected_windows_writes.insert(key, contents);
@@ -138,7 +149,7 @@ fn main() -> Result<()> {
             }
 
             if ext == "bash" {
-                let key = rel_key_for_expected(&root, &path, "root")?;
+                let key = expected_key_abs(&root, &path, '/', true)?;
                 let contents = fs::read_to_string(&path)
                     .with_context(|| format!("Failed to read {}", path.display()))?;
                 expected_unix_writes.insert(key, contents);

@@ -1,0 +1,110 @@
+{
+  "root": "D:\\movies\\[BD-Remux] Ore dake Level Up na Ken",
+  "player": "mpv",
+  "path_dirs": [
+    "bin"
+  ],
+  "binaries": [
+    "mpv"
+  ],
+  "files": {
+    "01. Im Used to It.mkv": "",
+    "02. If I Had One More Chance.mkv": "",
+    "03. Its Like a Game.mkv": "",
+    "04. Ive Gotta Get Stronger.mkv": "",
+    "05. A Pretty Good Deal.mkv": "",
+    "06. The Real Hunt Begins.mkv": "",
+    "07. Lets See How Far I Can Go.mkv": "",
+    "08. This Is Frustrating.mkv": "",
+    "09. Youve Been Hiding Your Skills.mkv": "",
+    "10. What Is This, a Picnic.mkv": "",
+    "11. A Knight Who Defends an Empty Throne.mkv": "",
+    "12. Arise.mkv": "",
+    "Amber": {
+      "01. Im Used to It.mka": "",
+      "02. If I Had One More Chance.mka": "",
+      "03. Its Like a Game.mka": "",
+      "04. Ive Gotta Get Stronger.mka": "",
+      "05. A Pretty Good Deal.mka": "",
+      "06. The Real Hunt Begins.mka": "",
+      "07. Lets See How Far I Can Go.mka": "",
+      "08. This Is Frustrating.mka": "",
+      "09. Youve Been Hiding Your Skills.mka": "",
+      "10. What Is This, a Picnic.mka": "",
+      "11. A Knight Who Defends an Empty Throne.mka": "",
+      "12. Arise.mka": ""
+    },
+    "Crunchyroll Sub": {
+      "01. Im Used to It.ass": "",
+      "02. If I Had One More Chance.ass": "",
+      "03. Its Like a Game.ass": "",
+      "04. Ive Gotta Get Stronger.ass": "",
+      "05. A Pretty Good Deal.ass": "",
+      "06. The Real Hunt Begins.ass": "",
+      "07. Lets See How Far I Can Go.ass": "",
+      "08. This Is Frustrating.ass": "",
+      "09. Youve Been Hiding Your Skills.ass": "",
+      "10. What Is This, a Picnic.ass": "",
+      "11. A Knight Who Defends an Empty Throne.ass": "",
+      "12. Arise.ass": ""
+    },
+    "Sings": {
+      "01. Im Used to It.ass": "",
+      "02. If I Had One More Chance.ass": "",
+      "03. Its Like a Game.ass": "",
+      "04. Ive Gotta Get Stronger.ass": "",
+      "05. A Pretty Good Deal.ass": "",
+      "06. The Real Hunt Begins.ass": "",
+      "07. Lets See How Far I Can Go.ass": "",
+      "08. This Is Frustrating.ass": "",
+      "09. Youve Been Hiding Your Skills.ass": "",
+      "10. What Is This, a Picnic.ass": "",
+      "11. A Knight Who Defends an Empty Throne.ass": "",
+      "12. Arise.ass": ""
+    },
+    "Studio Band": {
+      "01. Im Used to It.mka": "",
+      "02. If I Had One More Chance.mka": "",
+      "03. Its Like a Game.mka": "",
+      "04. Ive Gotta Get Stronger.mka": "",
+      "05. A Pretty Good Deal.mka": "",
+      "06. The Real Hunt Begins.mka": "",
+      "07. Lets See How Far I Can Go.mka": "",
+      "08. This Is Frustrating.mka": "",
+      "09. Youve Been Hiding Your Skills.mka": "",
+      "10. What Is This, a Picnic.mka": "",
+      "11. A Knight Who Defends an Empty Throne.mka": "",
+      "12. Arise.mka": ""
+    },
+    "TVShows": {
+      "01. Im Used to It.mka": "",
+      "02. If I Had One More Chance.mka": "",
+      "03. Its Like a Game.mka": "",
+      "04. Ive Gotta Get Stronger.mka": "",
+      "05. A Pretty Good Deal.mka": "",
+      "06. The Real Hunt Begins.mka": "",
+      "07. Lets See How Far I Can Go.mka": "",
+      "08. This Is Frustrating.mka": "",
+      "09. Youve Been Hiding Your Skills.mka": "",
+      "10. What Is This, a Picnic.mka": "",
+      "11. A Knight Who Defends an Empty Throne.mka": "",
+      "12. Arise.mka": ""
+    },
+    "a.sh": ""
+  },
+  "expected_windows_writes": {
+    "D:\\movies\\[BD-Remux] Ore dake Level Up na Ken\\01.cmd": "mpv.exe \"D:\\movies\\[BD-Remux] Ore dake Level Up na Ken\\01. Im Used to It.mkv\" --audio-file=\"D:\\movies\\[BD-Remux] Ore dake Level Up na Ken\\Amber\\01. Im Used to It.mka\" --audio-file=\"D:\\movies\\[BD-Remux] Ore dake Level Up na Ken\\Studio Band\\01. Im Used to It.mka\" --audio-file=\"D:\\movies\\[BD-Remux] Ore dake Level Up na Ken\\TVShows\\01. Im Used to It.mka\" --sub-file=\"D:\\movies\\[BD-Remux] Ore dake Level Up na Ken\\Crunchyroll Sub\\01. Im Used to It.ass\" --sub-file=\"D:\\movies\\[BD-Remux] Ore dake Level Up na Ken\\Sings\\01. Im Used to It.ass\"",
+    "D:\\movies\\[BD-Remux] Ore dake Level Up na Ken\\02.cmd": "mpv.exe \"D:\\movies\\[BD-Remux] Ore dake Level Up na Ken\\02. If I Had One More Chance.mkv\" --audio-file=\"D:\\movies\\[BD-Remux] Ore dake Level Up na Ken\\Amber\\02. If I Had One More Chance.mka\" --audio-file=\"D:\\movies\\[BD-Remux] Ore dake Level Up na Ken\\Studio Band\\02. If I Had One More Chance.mka\" --audio-file=\"D:\\movies\\[BD-Remux] Ore dake Level Up na Ken\\TVShows\\02. If I Had One More Chance.mka\" --sub-file=\"D:\\movies\\[BD-Remux] Ore dake Level Up na Ken\\Crunchyroll Sub\\02. If I Had One More Chance.ass\" --sub-file=\"D:\\movies\\[BD-Remux] Ore dake Level Up na Ken\\Sings\\02. If I Had One More Chance.ass\"",
+    "D:\\movies\\[BD-Remux] Ore dake Level Up na Ken\\03.cmd": "mpv.exe \"D:\\movies\\[BD-Remux] Ore dake Level Up na Ken\\03. Its Like a Game.mkv\" --audio-file=\"D:\\movies\\[BD-Remux] Ore dake Level Up na Ken\\Amber\\03. Its Like a Game.mka\" --audio-file=\"D:\\movies\\[BD-Remux] Ore dake Level Up na Ken\\Studio Band\\03. Its Like a Game.mka\" --audio-file=\"D:\\movies\\[BD-Remux] Ore dake Level Up na Ken\\TVShows\\03. Its Like a Game.mka\" --sub-file=\"D:\\movies\\[BD-Remux] Ore dake Level Up na Ken\\Crunchyroll Sub\\03. Its Like a Game.ass\" --sub-file=\"D:\\movies\\[BD-Remux] Ore dake Level Up na Ken\\Sings\\03. Its Like a Game.ass\"",
+    "D:\\movies\\[BD-Remux] Ore dake Level Up na Ken\\04.cmd": "mpv.exe \"D:\\movies\\[BD-Remux] Ore dake Level Up na Ken\\04. Ive Gotta Get Stronger.mkv\" --audio-file=\"D:\\movies\\[BD-Remux] Ore dake Level Up na Ken\\Amber\\04. Ive Gotta Get Stronger.mka\" --audio-file=\"D:\\movies\\[BD-Remux] Ore dake Level Up na Ken\\Studio Band\\04. Ive Gotta Get Stronger.mka\" --audio-file=\"D:\\movies\\[BD-Remux] Ore dake Level Up na Ken\\TVShows\\04. Ive Gotta Get Stronger.mka\" --sub-file=\"D:\\movies\\[BD-Remux] Ore dake Level Up na Ken\\Crunchyroll Sub\\04. Ive Gotta Get Stronger.ass\" --sub-file=\"D:\\movies\\[BD-Remux] Ore dake Level Up na Ken\\Sings\\04. Ive Gotta Get Stronger.ass\"",
+    "D:\\movies\\[BD-Remux] Ore dake Level Up na Ken\\05.cmd": "mpv.exe \"D:\\movies\\[BD-Remux] Ore dake Level Up na Ken\\05. A Pretty Good Deal.mkv\" --audio-file=\"D:\\movies\\[BD-Remux] Ore dake Level Up na Ken\\Amber\\05. A Pretty Good Deal.mka\" --audio-file=\"D:\\movies\\[BD-Remux] Ore dake Level Up na Ken\\Studio Band\\05. A Pretty Good Deal.mka\" --audio-file=\"D:\\movies\\[BD-Remux] Ore dake Level Up na Ken\\TVShows\\05. A Pretty Good Deal.mka\" --sub-file=\"D:\\movies\\[BD-Remux] Ore dake Level Up na Ken\\Crunchyroll Sub\\05. A Pretty Good Deal.ass\" --sub-file=\"D:\\movies\\[BD-Remux] Ore dake Level Up na Ken\\Sings\\05. A Pretty Good Deal.ass\"",
+    "D:\\movies\\[BD-Remux] Ore dake Level Up na Ken\\06.cmd": "mpv.exe \"D:\\movies\\[BD-Remux] Ore dake Level Up na Ken\\06. The Real Hunt Begins.mkv\" --audio-file=\"D:\\movies\\[BD-Remux] Ore dake Level Up na Ken\\Amber\\06. The Real Hunt Begins.mka\" --audio-file=\"D:\\movies\\[BD-Remux] Ore dake Level Up na Ken\\Studio Band\\06. The Real Hunt Begins.mka\" --audio-file=\"D:\\movies\\[BD-Remux] Ore dake Level Up na Ken\\TVShows\\06. The Real Hunt Begins.mka\" --sub-file=\"D:\\movies\\[BD-Remux] Ore dake Level Up na Ken\\Crunchyroll Sub\\06. The Real Hunt Begins.ass\" --sub-file=\"D:\\movies\\[BD-Remux] Ore dake Level Up na Ken\\Sings\\06. The Real Hunt Begins.ass\"",
+    "D:\\movies\\[BD-Remux] Ore dake Level Up na Ken\\07.cmd": "mpv.exe \"D:\\movies\\[BD-Remux] Ore dake Level Up na Ken\\07. Lets See How Far I Can Go.mkv\" --audio-file=\"D:\\movies\\[BD-Remux] Ore dake Level Up na Ken\\Amber\\07. Lets See How Far I Can Go.mka\" --audio-file=\"D:\\movies\\[BD-Remux] Ore dake Level Up na Ken\\Studio Band\\07. Lets See How Far I Can Go.mka\" --audio-file=\"D:\\movies\\[BD-Remux] Ore dake Level Up na Ken\\TVShows\\07. Lets See How Far I Can Go.mka\" --sub-file=\"D:\\movies\\[BD-Remux] Ore dake Level Up na Ken\\Crunchyroll Sub\\07. Lets See How Far I Can Go.ass\" --sub-file=\"D:\\movies\\[BD-Remux] Ore dake Level Up na Ken\\Sings\\07. Lets See How Far I Can Go.ass\"",
+    "D:\\movies\\[BD-Remux] Ore dake Level Up na Ken\\08.cmd": "mpv.exe \"D:\\movies\\[BD-Remux] Ore dake Level Up na Ken\\08. This Is Frustrating.mkv\" --audio-file=\"D:\\movies\\[BD-Remux] Ore dake Level Up na Ken\\Amber\\08. This Is Frustrating.mka\" --audio-file=\"D:\\movies\\[BD-Remux] Ore dake Level Up na Ken\\Studio Band\\08. This Is Frustrating.mka\" --audio-file=\"D:\\movies\\[BD-Remux] Ore dake Level Up na Ken\\TVShows\\08. This Is Frustrating.mka\" --sub-file=\"D:\\movies\\[BD-Remux] Ore dake Level Up na Ken\\Crunchyroll Sub\\08. This Is Frustrating.ass\" --sub-file=\"D:\\movies\\[BD-Remux] Ore dake Level Up na Ken\\Sings\\08. This Is Frustrating.ass\"",
+    "D:\\movies\\[BD-Remux] Ore dake Level Up na Ken\\09.cmd": "mpv.exe \"D:\\movies\\[BD-Remux] Ore dake Level Up na Ken\\09. Youve Been Hiding Your Skills.mkv\" --audio-file=\"D:\\movies\\[BD-Remux] Ore dake Level Up na Ken\\Amber\\09. Youve Been Hiding Your Skills.mka\" --audio-file=\"D:\\movies\\[BD-Remux] Ore dake Level Up na Ken\\Studio Band\\09. Youve Been Hiding Your Skills.mka\" --audio-file=\"D:\\movies\\[BD-Remux] Ore dake Level Up na Ken\\TVShows\\09. Youve Been Hiding Your Skills.mka\" --sub-file=\"D:\\movies\\[BD-Remux] Ore dake Level Up na Ken\\Crunchyroll Sub\\09. Youve Been Hiding Your Skills.ass\" --sub-file=\"D:\\movies\\[BD-Remux] Ore dake Level Up na Ken\\Sings\\09. Youve Been Hiding Your Skills.ass\"",
+    "D:\\movies\\[BD-Remux] Ore dake Level Up na Ken\\10.cmd": "mpv.exe \"D:\\movies\\[BD-Remux] Ore dake Level Up na Ken\\10. What Is This, a Picnic.mkv\" --audio-file=\"D:\\movies\\[BD-Remux] Ore dake Level Up na Ken\\Amber\\10. What Is This, a Picnic.mka\" --audio-file=\"D:\\movies\\[BD-Remux] Ore dake Level Up na Ken\\Studio Band\\10. What Is This, a Picnic.mka\" --audio-file=\"D:\\movies\\[BD-Remux] Ore dake Level Up na Ken\\TVShows\\10. What Is This, a Picnic.mka\" --sub-file=\"D:\\movies\\[BD-Remux] Ore dake Level Up na Ken\\Crunchyroll Sub\\10. What Is This, a Picnic.ass\" --sub-file=\"D:\\movies\\[BD-Remux] Ore dake Level Up na Ken\\Sings\\10. What Is This, a Picnic.ass\"",
+    "D:\\movies\\[BD-Remux] Ore dake Level Up na Ken\\11.cmd": "mpv.exe \"D:\\movies\\[BD-Remux] Ore dake Level Up na Ken\\11. A Knight Who Defends an Empty Throne.mkv\" --audio-file=\"D:\\movies\\[BD-Remux] Ore dake Level Up na Ken\\Amber\\11. A Knight Who Defends an Empty Throne.mka\" --audio-file=\"D:\\movies\\[BD-Remux] Ore dake Level Up na Ken\\Studio Band\\11. A Knight Who Defends an Empty Throne.mka\" --audio-file=\"D:\\movies\\[BD-Remux] Ore dake Level Up na Ken\\TVShows\\11. A Knight Who Defends an Empty Throne.mka\" --sub-file=\"D:\\movies\\[BD-Remux] Ore dake Level Up na Ken\\Crunchyroll Sub\\11. A Knight Who Defends an Empty Throne.ass\" --sub-file=\"D:\\movies\\[BD-Remux] Ore dake Level Up na Ken\\Sings\\11. A Knight Who Defends an Empty Throne.ass\"",
+    "D:\\movies\\[BD-Remux] Ore dake Level Up na Ken\\12.cmd": "mpv.exe \"D:\\movies\\[BD-Remux] Ore dake Level Up na Ken\\12. Arise.mkv\" --audio-file=\"D:\\movies\\[BD-Remux] Ore dake Level Up na Ken\\Amber\\12. Arise.mka\" --audio-file=\"D:\\movies\\[BD-Remux] Ore dake Level Up na Ken\\Studio Band\\12. Arise.mka\" --audio-file=\"D:\\movies\\[BD-Remux] Ore dake Level Up na Ken\\TVShows\\12. Arise.mka\" --sub-file=\"D:\\movies\\[BD-Remux] Ore dake Level Up na Ken\\Crunchyroll Sub\\12. Arise.ass\" --sub-file=\"D:\\movies\\[BD-Remux] Ore dake Level Up na Ken\\Sings\\12. Arise.ass\""
+  },
+  "expected_unix_writes": {}
+}
