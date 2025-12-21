@@ -16,6 +16,7 @@ pub fn decorate_program_name(base: &str) -> String {
     base.to_string()
 }
 
+#[allow(dead_code)]
 pub fn set_script_permissions(path: &Path) -> Result<()> {
     set_script_permissions_with(&crate::fs_access::RealFs, path)
 }
