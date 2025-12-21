@@ -149,8 +149,14 @@ fn assert_fixture_writes(
     let actual_json = serde_json::to_string_pretty(actual).unwrap();
 
     pretty_assertions::assert_eq!(
-        format!("Fixture mismatch: {}\n{expected_json}", fixture_path.display()),
-        format!("Fixture mismatch: {}\n{actual_json}", fixture_path.display()),
+        format!(
+            "Fixture mismatch: {}\n{expected_json}",
+            fixture_path.display()
+        ),
+        format!(
+            "Fixture mismatch: {}\n{actual_json}",
+            fixture_path.display()
+        ),
     );
 }
 

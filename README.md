@@ -41,3 +41,9 @@ Will create `tests\fixtures\Kimetsu.no.Yaiba.Katanakaji.no.Sato.hen.WEB-DL.1080p
 cargo fmt-check
 cargo lint
 ```
+
+## Autoformat
+
+```sh
+cargo fmt --all -- --check
+```
