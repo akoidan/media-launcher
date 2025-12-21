@@ -33,8 +33,8 @@ struct Args {
     #[arg(value_parser = validate_root_dir)]
     root_dir: Option<PathBuf>,
 
-    #[arg(long, value_enum, default_value_t = players::PlayerKind::Mpv)]
-    player: players::PlayerKind,
+    #[arg(long, value_enum)]
+    player: Option<players::PlayerKind>,
 }
 
 #[derive(Debug, Default)]
@@ -170,6 +170,8 @@ fn read_dir_recursive(
 fn main() -> Result<()> {
     let args = Args::parse();
 
+    let player_kind = players::resolve_player_kind(args.player)?;
+
     let selected_root_dir = match args.root_dir {
         Some(p) => p,
         None => pick_directory()?,
@@ -178,7 +180,7 @@ fn main() -> Result<()> {
     let root_dir = fs::canonicalize(&selected_root_dir)
         .with_context(|| format!("Failed to resolve {}", selected_root_dir.display()))?;
 
-    let player = players::create_player(args.player);
+    let player = players::create_player(player_kind);
 
     let mut structure: BTreeMap<u32, EpisodeFiles> = BTreeMap::new();
     let mut font_dir: Option<PathBuf> = None;
