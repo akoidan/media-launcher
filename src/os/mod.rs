@@ -6,6 +6,8 @@ mod linux;
 
 use std::env;
 
+use crate::fs_access::{Fs, RealFs};
+
 #[cfg(windows)]
 pub use windows::*;
 
@@ -13,6 +15,10 @@ pub use windows::*;
 pub use linux::*;
 
 pub fn is_program_in_path(base: &str) -> bool {
+    is_program_in_path_with(&RealFs, base)
+}
+
+pub fn is_program_in_path_with(fs_access: &impl Fs, base: &str) -> bool {
     let program = decorate_program_name(base);
 
     let Some(path) = env::var_os("PATH") else {
@@ -20,7 +26,7 @@ pub fn is_program_in_path(base: &str) -> bool {
     };
 
     for dir in env::split_paths(&path) {
-        if dir.join(&program).is_file() {
+        if fs_access.is_file(&dir.join(&program)) {
             return true;
         }
     }

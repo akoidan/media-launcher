@@ -1,6 +1,8 @@
-use std::{fs, path::Path};
+use std::path::Path;
 
 use anyhow::Result;
+
+use crate::fs_access::{Fs, RealFs};
 
 pub fn default_pick_dir() -> &'static str {
     "~/"
@@ -15,9 +17,5 @@ pub fn decorate_program_name(base: &str) -> String {
 }
 
 pub fn set_script_permissions(path: &Path) -> Result<()> {
-    use std::os::unix::fs::PermissionsExt;
-
-    let perm = fs::Permissions::from_mode(0o755);
-    fs::set_permissions(path, perm)?;
-    Ok(())
+    RealFs.set_executable(path)
 }

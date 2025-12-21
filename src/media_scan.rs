@@ -1,7 +1,6 @@
 use std::{
     collections::BTreeMap,
     ffi::OsStr,
-    fs,
     path::{Path, PathBuf},
     sync::OnceLock,
 };
@@ -10,6 +9,7 @@ use anyhow::{anyhow, Context, Result};
 use regex::Regex;
 use rfd::FileDialog;
 
+use crate::fs_access::{Fs, RealFs};
 use crate::os;
 
 static RE_E: OnceLock<Regex> = OnceLock::new();
@@ -122,46 +122,63 @@ fn handle_media_file(path: PathBuf, structure: &mut BTreeMap<u32, EpisodeFiles>)
 }
 
 pub fn scan_dir(dir_path: &Path) -> Result<(BTreeMap<u32, EpisodeFiles>, Option<PathBuf>)> {
+    scan_dir_with(&RealFs, dir_path)
+}
+
+pub fn scan_dir_with(
+    fs_access: &impl Fs,
+    dir_path: &Path,
+) -> Result<(BTreeMap<u32, EpisodeFiles>, Option<PathBuf>)> {
     let mut structure: BTreeMap<u32, EpisodeFiles> = BTreeMap::new();
     let mut font_dir: Option<PathBuf> = None;
 
-    read_dir_recursive(dir_path, &mut structure, &mut font_dir)?;
+    read_dir_recursive(fs_access, dir_path, &mut structure, &mut font_dir)?;
     Ok((structure, font_dir))
 }
 
 pub fn write_episode_script(root_dir: &Path, episode: u32, open_cmd: &str) -> Result<()> {
+    write_episode_script_with(&RealFs, root_dir, episode, open_cmd)
+}
+
+pub fn write_episode_script_with(
+    fs_access: &impl Fs,
+    root_dir: &Path,
+    episode: u32,
+    open_cmd: &str,
+) -> Result<()> {
     let script_path = root_dir.join(format!("{:02}.{}", episode, os::script_ext()));
-    fs::write(&script_path, open_cmd)?;
+    fs_access.write(&script_path, open_cmd.as_bytes())?;
     os::set_script_permissions(&script_path)?;
     println!("{}", script_path.display());
     Ok(())
 }
 
 fn read_dir_recursive(
+    fs_access: &impl Fs,
     dir_path: &Path,
     structure: &mut BTreeMap<u32, EpisodeFiles>,
     font_dir: &mut Option<PathBuf>,
 ) -> Result<()> {
-    let entries = fs::read_dir(dir_path)
+    let entries = fs_access
+        .read_dir_paths(dir_path)
         .with_context(|| format!("Failed to read directory {}", dir_path.display()))?;
 
     for entry in entries {
-        let entry = entry?;
-        let path = entry.path();
-        let file_type = entry.file_type()?;
-
-        if file_type.is_dir() {
-            let name = entry.file_name();
-            let name = name.to_string_lossy().to_ascii_lowercase();
+        let path = entry;
+        if fs_access.is_dir(&path) {
+            let name = path
+                .file_name()
+                .map(|s| s.to_string_lossy().to_ascii_lowercase());
+            let name = name.as_deref().unwrap_or("");
             if name.contains("font") || name.contains("шрифты") {
                 *font_dir = Some(path);
             } else {
-                read_dir_recursive(&path, structure, font_dir)?;
+                read_dir_recursive(fs_access, &path, structure, font_dir)?;
             }
             continue;
         }
 
-        if file_type.is_file() {
+        if fs_access.is_file(&path) {
             handle_media_file(path, structure)?;
         }
     }

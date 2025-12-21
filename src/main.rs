@@ -1,9 +1,12 @@
-use std::{fs, path::PathBuf};
+use std::path::PathBuf;
 
 use anyhow::Result;
 use clap::Parser;
 
+use crate::fs_access::{Fs, RealFs};
+
 mod media_scan;
+mod fs_access;
 mod os;
 mod players;
 
@@ -22,7 +25,7 @@ fn main() -> Result<()> {
     let args = Args::parse();
 
     let root_dir = match args.root_dir {
-        Some(p) => fs::canonicalize(p)?,
+        Some(p) => RealFs.canonicalize(&p)?,
         None => media_scan::pick_directory()?,
     };
 
