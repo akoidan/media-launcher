@@ -36,8 +36,8 @@ Will create `tests\fixtures\Kimetsu.no.Yaiba.Katanakaji.no.Sato.hen.WEB-DL.1080p
 
 ## Lint
 
-If you want formatting/linting locally:
 
 ```sh
-rustup component add rustfmt clippy
+cargo fmt-check
+cargo lint
 ```
