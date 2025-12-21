@@ -121,7 +121,15 @@ fn handle_media_file(path: PathBuf, structure: &mut BTreeMap<u32, EpisodeFiles>)
     Ok(())
 }
 
-pub fn read_dir_recursive(
+pub fn scan_dir(dir_path: &Path) -> Result<(BTreeMap<u32, EpisodeFiles>, Option<PathBuf>)> {
+    let mut structure: BTreeMap<u32, EpisodeFiles> = BTreeMap::new();
+    let mut font_dir: Option<PathBuf> = None;
+
+    read_dir_recursive(dir_path, &mut structure, &mut font_dir)?;
+    Ok((structure, font_dir))
+}
+
+fn read_dir_recursive(
     dir_path: &Path,
     structure: &mut BTreeMap<u32, EpisodeFiles>,
     font_dir: &mut Option<PathBuf>,

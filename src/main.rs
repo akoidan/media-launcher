@@ -1,4 +1,4 @@
-use std::{collections::BTreeMap, fs, path::PathBuf};
+use std::{fs, path::PathBuf};
 
 use anyhow::{Context, Result};
 use clap::Parser;
@@ -32,13 +32,11 @@ fn main() -> Result<()> {
 
     let player = players::resolve_player(args.player)?;
 
-    let mut structure: BTreeMap<u32, media_scan::EpisodeFiles> = BTreeMap::new();
-    let mut font_dir: Option<PathBuf> = None;
-
-    media_scan::read_dir_recursive(&root_dir, &mut structure, &mut font_dir)?;
+    let (structure, font_dir) = media_scan::scan_dir(&root_dir)?;
 
     for (episode, value) in structure {
         let Some(open_cmd) = player.build_launch_command(&value, &font_dir) else {
+            eprintln!("Skipping episode {episode}: cannot build launch command");
             continue;
         };
 
