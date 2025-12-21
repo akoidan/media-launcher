@@ -3,6 +3,9 @@ name = "media-launcher"
 version = "0.1.0"
 edition = "2021"
 
+[workspace]
+members = ["xtask"]
+
 [dependencies]
 anyhow = "1"
 clap = { version = "4", features = ["derive"] }
