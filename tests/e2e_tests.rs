@@ -160,6 +160,7 @@ fn run_fixture(fixture_path: &Path, fixture_json: &str) {
         )
     });
 
+    #[cfg(windows)]
     let windows_root = PathBuf::from(&input.root.windows);
 
     #[cfg(windows)]
@@ -167,12 +168,12 @@ fn run_fixture(fixture_path: &Path, fixture_json: &str) {
 
     #[cfg(not(windows))]
     let root = {
-        let windows_root_basename = windows_root
-            .file_name()
+        let fixture_stem = fixture_path
+            .file_stem()
             .and_then(|s| s.to_str())
             .unwrap_or("")
             .to_string();
-        PathBuf::from(&input.root.linux).join(&windows_root_basename)
+        PathBuf::from(&input.root.linux).join(&fixture_stem)
     };
 
     #[cfg(windows)]
