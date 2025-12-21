@@ -16,45 +16,58 @@ jobs:
     runs-on: ubuntu-22.04
     steps:
       - uses: actions/checkout@v3
-      - uses: actions/setup-node@v6
+
+      - uses: dtolnay/rust-toolchain@stable
         with:
-          package-manager-cache: false
-          node-version: 24
-      - name: Restore node_modules cache
-        id: cache-node
+          components: rustfmt, clippy
+
+      - name: Restore cargo cache
+        id: cache-cargo
         # DO not create cache for PRs, since they are not accessible withing different PRs
         # Only restore them
         uses: actions/cache/restore@v4
         with:
-          path: node_modules
-          key: ${{ runner.os }}-node-modules-${{ hashFiles('yarn.lock') }}
-      - name: Install yarn deps
-        if: steps.cache-node.outputs.cache-hit != 'true'
-        run: yarn install --frozen-lockfile
-      - name: Lint
-        run: yarn lint
+          path: |
+            ~/.cargo/registry
+            ~/.cargo/git
+            target
+          key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
+
+      - name: Cargo fetch
+        if: steps.cache-cargo.outputs.cache-hit != 'true'
+        run: cargo fetch
+
+      - name: Fmt
+        run: cargo fmt --all --check
+
+      - name: Clippy
+        run: cargo clippy --all-targets --all-features -- -D warnings
 
   test:
     runs-on: ubuntu-22.04
     steps:
       - uses: actions/checkout@v3
-      - uses: actions/setup-node@v6
-        with:
-          package-manager-cache: false
-          node-version: 24
-      - name: Restore node_modules cache
-        id: cache-node
+
+      - uses: dtolnay/rust-toolchain@stable
+
+      - name: Restore cargo cache
+        id: cache-cargo
         # DO not create cache for PRs, since they are not accessible withing different PRs
         # Only restore them
         uses: actions/cache/restore@v4
         with:
-          path: node_modules
-          key: ${{ runner.os }}-node-modules-${{ hashFiles('yarn.lock') }}
-      - name: Install yarn deps
-        if: steps.cache-node.outputs.cache-hit != 'true'
-        run: yarn install --frozen-lockfile
+          path: |
+            ~/.cargo/registry
+            ~/.cargo/git
+            target
+          key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
+
+      - name: Cargo fetch
+        if: steps.cache-cargo.outputs.cache-hit != 'true'
+        run: cargo fetch
+
       - name: Tests
-        run: yarn jest
+        run: cargo test --all-features
 
   linux:
     runs-on: ubuntu-24.04
@@ -67,51 +80,50 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y --no-install-recommends libv4l-dev
 
-      - uses: actions/setup-node@v6
-        with:
-          package-manager-cache: false
-          node-version: 24
-      - name: Restore node_modules cache
-        id: cache-node
+      - uses: dtolnay/rust-toolchain@stable
+
+      - name: Restore cargo cache
+        id: cache-cargo
         # DO not create cache for PRs, since they are not accessible withing different PRs
         # Only restore them
         uses: actions/cache/restore@v4
         with:
-          path: node_modules
-          key: ${{ runner.os }}-node-modules-${{ hashFiles('yarn.lock') }}
-      - name: Install yarn deps
-        if: steps.cache-node.outputs.cache-hit != 'true'
-        run: yarn install --frozen-lockfile
-      - name: Cmake
-        run: yarn cmake
+          path: |
+            ~/.cargo/registry
+            ~/.cargo/git
+            target
+          key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
+
+      - name: Cargo fetch
+        if: steps.cache-cargo.outputs.cache-hit != 'true'
+        run: cargo fetch
+
+      - name: Build (release)
+        run: cargo build --release
 
   win32:
     runs-on: windows-2022
     permissions: write-all
     steps:
       - uses: actions/checkout@v3
-      - uses: actions/setup-node@v6
-        with:
-          package-manager-cache: false
-          node-version: 24
-      - name: Restore node_modules cache
-        id: cache-node
+
+      - uses: dtolnay/rust-toolchain@stable
+
+      - name: Restore cargo cache
+        id: cache-cargo
         # DO not create cache for PRs, since they are not accessible withing different PRs
         # Only restore them
         uses: actions/cache/restore@v4
         with:
-          path: node_modules
-          key: ${{ runner.os }}-node-modules-${{ hashFiles('yarn.lock') }}
-      - name: Install yarn deps
-        if: steps.cache-node.outputs.cache-hit != 'true'
-        run: yarn install --frozen-lockfile
-      - name: Cmake
-        run: yarn cmake
-      - name: Nest
-        run: yarn nest
+          path: |
+            ${{ env.USERPROFILE }}\.cargo\registry
+            ${{ env.USERPROFILE }}\.cargo\git
+            target
+          key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
 
-      - name: Bundle everything to a single file
-        run: yarn esbuild
+      - name: Cargo fetch
+        if: steps.cache-cargo.outputs.cache-hit != 'true'
+        run: cargo fetch
 
-      - name: Create a windows executable
-        run: yarn native
+      - name: Build (release)
+        run: cargo build --release
