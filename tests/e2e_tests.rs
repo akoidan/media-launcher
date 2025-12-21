@@ -14,94 +14,18 @@ mod players;
 #[allow(dead_code)]
 mod app;
 
+mod common;
+
 use serde::Deserialize;
 use serde_json::Value;
 
 use std::{
-    collections::{BTreeSet, HashMap},
     env,
     path::{Path, PathBuf},
     sync::{Mutex, OnceLock},
 };
 
-use fs_access::Fs;
-
-#[derive(Debug, Default)]
-struct MockFs {
-    dirs: BTreeSet<PathBuf>,
-    files: BTreeSet<PathBuf>,
-    dir_entries: HashMap<PathBuf, Vec<PathBuf>>,
-    file_contents: HashMap<PathBuf, Vec<u8>>,
-    writes: Mutex<Vec<(PathBuf, Vec<u8>)>>,
-}
-
-impl MockFs {
-    fn push_unique(list: &mut Vec<PathBuf>, item: PathBuf) {
-        if !list.contains(&item) {
-            list.push(item);
-        }
-    }
-
-    fn add_dir(&mut self, dir: PathBuf) {
-        if let Some(parent) = dir.parent() {
-            let parent = parent.to_path_buf();
-            self.dirs.insert(parent.clone());
-            self.dir_entries.entry(parent.clone()).or_default();
-            let list = self.dir_entries.entry(parent).or_default();
-            Self::push_unique(list, dir.clone());
-        }
-
-        self.dirs.insert(dir.clone());
-        self.dir_entries.entry(dir).or_default();
-    }
-
-    fn add_file(&mut self, file: PathBuf) {
-        if let Some(parent) = file.parent() {
-            let parent = parent.to_path_buf();
-            self.add_dir(parent.clone());
-            let list = self.dir_entries.entry(parent).or_default();
-            Self::push_unique(list, file.clone());
-        }
-        self.files.insert(file);
-    }
-
-    fn put_input_file(&mut self, file: PathBuf, contents: &[u8]) {
-        self.add_file(file.clone());
-        self.file_contents.insert(file, contents.to_vec());
-    }
-}
-
-impl Fs for MockFs {
-    fn read_dir_paths(&self, dir: &Path) -> anyhow::Result<Vec<PathBuf>> {
-        let mut v = self.dir_entries.get(dir).cloned().unwrap_or_default();
-        v.sort();
-        Ok(v)
-    }
-
-    fn is_dir(&self, path: &Path) -> bool {
-        self.dirs.contains(path)
-    }
-
-    fn is_file(&self, path: &Path) -> bool {
-        self.files.contains(path)
-    }
-
-    fn write(&self, path: &Path, contents: &[u8]) -> anyhow::Result<()> {
-        // Writes are the program outputs (scripts). Record them.
-        let mut writes = self.writes.lock().unwrap();
-        writes.push((path.to_path_buf(), contents.to_vec()));
-        Ok(())
-    }
-
-    fn canonicalize(&self, path: &Path) -> anyhow::Result<PathBuf> {
-        Ok(path.to_path_buf())
-    }
-
-    fn set_executable(&self, path: &Path) -> anyhow::Result<()> {
-        let _ = path;
-        Ok(())
-    }
-}
+use common::{populate_tree, MockFs};
 
 fn env_lock() -> &'static Mutex<()> {
     static LOCK: OnceLock<Mutex<()>> = OnceLock::new();
@@ -133,23 +57,6 @@ struct FixtureInput {
     #[serde(default)]
     #[allow(dead_code)]
     expected_unix_writes: std::collections::BTreeMap<String, String>,
-}
-
-fn populate_tree(fs: &mut MockFs, base: &Path, node: &Value) {
-    match node {
-        Value::String(contents) => {
-            fs.put_input_file(base.to_path_buf(), contents.as_bytes());
-        }
-        Value::Object(map) => {
-            fs.add_dir(base.to_path_buf());
-            for (name, child) in map {
-                populate_tree(fs, &base.join(name), child);
-            }
-        }
-        _ => {
-            panic!("Invalid fixture node for {}", base.display());
-        }
-    }
 }
 
 fn run_fixture(fixture_path: &Path, fixture_json: &str) {
@@ -242,53 +149,13 @@ fn run_fixture(fixture_path: &Path, fixture_json: &str) {
         })
         .collect();
 
-    if *expected != actual {
-        let mut missing = Vec::new();
-        let mut extra = Vec::new();
-        let mut mismatched = Vec::new();
+    let expected_json = serde_json::to_string_pretty(expected).unwrap();
+    let actual_json = serde_json::to_string_pretty(&actual).unwrap();
 
-        for (k, v_expected) in expected {
-            match actual.get(k) {
-                None => missing.push(k.clone()),
-                Some(v_actual) => {
-                    if v_actual != v_expected {
-                        mismatched.push(k.clone());
-                    }
-                }
-            }
-        }
-
-        for k in actual.keys() {
-            if !expected.contains_key(k) {
-                extra.push(k.clone());
-            }
-        }
-
-        let mut msg = String::new();
-        use std::fmt::Write as _;
-        let _ = writeln!(&mut msg, "Fixture mismatch: {}", fixture_path.display());
-        let _ = writeln!(&mut msg, "Expected keys: {}", expected.len());
-        let _ = writeln!(&mut msg, "Actual keys: {}", actual.len());
-        let _ = writeln!(&mut msg, "Missing keys: {}", missing.len());
-        let _ = writeln!(&mut msg, "Extra keys: {}", extra.len());
-        let _ = writeln!(&mut msg, "Mismatched contents: {}", mismatched.len());
-
-        for k in missing.iter().take(20) {
-            let _ = writeln!(&mut msg, "missing: {k}");
-        }
-        for k in extra.iter().take(20) {
-            let _ = writeln!(&mut msg, "extra: {k}");
-        }
-        for k in mismatched.iter().take(10) {
-            let v_expected = expected.get(k).unwrap();
-            let v_actual = actual.get(k).unwrap();
-            let _ = writeln!(&mut msg, "mismatch: {k}");
-            let _ = writeln!(&mut msg, "--- expected ---\n{v_expected}");
-            let _ = writeln!(&mut msg, "--- actual ---\n{v_actual}");
-        }
-
-        panic!("{msg}");
-    }
+    pretty_assertions::assert_eq!(
+        format!("Fixture mismatch: {}\n{expected_json}", fixture_path.display()),
+        format!("Fixture mismatch: {}\n{actual_json}", fixture_path.display()),
+    );
 }
 
 #[test]
