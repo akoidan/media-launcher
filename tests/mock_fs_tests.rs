@@ -13,8 +13,10 @@ mod players;
 #[path = "../src/app.rs"]
 mod app;
 
+use serde::Deserialize;
+use serde_json::Value;
+
 use std::{
-    collections::{BTreeSet, HashMap},
     env,
     path::{Path, PathBuf},
     sync::{Mutex, OnceLock},
@@ -22,71 +24,100 @@ use std::{
 
 use fs_access::Fs;
 
+use vfs::{MemoryFS, VfsFileType, VfsPath};
+
 #[derive(Debug)]
-struct MockFs {
-    dirs: BTreeSet<PathBuf>,
-    files: BTreeSet<PathBuf>,
-    dir_entries: HashMap<PathBuf, Vec<PathBuf>>,
-    writes: Mutex<HashMap<PathBuf, Vec<u8>>>,
+struct VfsFs {
+    root: VfsPath,
+    writes: Mutex<Vec<(PathBuf, Vec<u8>)>>,
 }
 
-impl Default for MockFs {
-    fn default() -> Self {
+impl VfsFs {
+    fn new() -> Self {
         Self {
-            dirs: BTreeSet::new(),
-            files: BTreeSet::new(),
-            dir_entries: HashMap::new(),
-            writes: Mutex::new(HashMap::new()),
+            root: VfsPath::new(MemoryFS::new()),
+            writes: Mutex::new(Vec::new()),
         }
     }
-}
 
-impl MockFs {
-    fn add_dir(&mut self, dir: impl Into<PathBuf>) {
-        let dir = dir.into();
-        self.dirs.insert(dir.clone());
-        self.dir_entries.entry(dir).or_default();
+    fn norm(path: &Path) -> String {
+        path.to_string_lossy().replace('\\', "/")
     }
 
-    fn add_file(&mut self, path: impl Into<PathBuf>) {
-        let path = path.into();
+    fn from_vfs_path(p: &VfsPath) -> PathBuf {
+        PathBuf::from(p.as_str().trim_start_matches('/'))
+    }
+
+    fn vpath(&self, path: &Path) -> anyhow::Result<VfsPath> {
+        Ok(self.root.join(Self::norm(path))?)
+    }
+
+    fn ensure_dir(&self, path: &Path) -> anyhow::Result<()> {
+        self.vpath(path)?.create_dir_all()?;
+        Ok(())
+    }
+
+    fn create_file(&self, path: &Path) -> anyhow::Result<()> {
         if let Some(parent) = path.parent() {
-            let parent = parent.to_path_buf();
-            self.add_dir(parent.clone());
-            self.dir_entries.entry(parent).or_default().push(path.clone());
+            self.ensure_dir(parent)?;
         }
-        self.files.insert(path);
+        let file = self.vpath(path)?;
+        let mut w = file.create_file()?;
+        use std::io::Write;
+        w.write_all(b"")?;
+        Ok(())
     }
 
-    fn add_child_dir(&mut self, parent: impl Into<PathBuf>, child: impl Into<PathBuf>) {
-        let parent = parent.into();
-        let child = child.into();
-        self.add_dir(parent.clone());
-        self.add_dir(child.clone());
-        self.dir_entries.entry(parent).or_default().push(child);
+    fn put_file(&self, path: &Path, contents: &[u8]) -> anyhow::Result<()> {
+        if let Some(parent) = path.parent() {
+            self.ensure_dir(parent)?;
+        }
+        let file = self.vpath(path)?;
+        let mut w = file.create_file()?;
+        use std::io::Write;
+        w.write_all(contents)?;
+        Ok(())
     }
 }
 
-impl Fs for MockFs {
+impl Default for VfsFs {
+    fn default() -> Self {
+        Self::new()
+    }
+}
+
+impl Fs for VfsFs {
     fn read_dir_paths(&self, dir: &Path) -> anyhow::Result<Vec<PathBuf>> {
-        Ok(self
-            .dir_entries
-            .get(dir)
-            .cloned()
-            .unwrap_or_default())
+        let iter = self.vpath(dir)?.read_dir()?;
+        Ok(iter.map(|p| Self::from_vfs_path(&p)).collect())
     }
 
     fn is_dir(&self, path: &Path) -> bool {
-        self.dirs.contains(path)
+        match self.vpath(path).and_then(|p| Ok(p.metadata()?)) {
+            Ok(m) => m.file_type == VfsFileType::Directory,
+            Err(_) => false,
+        }
     }
 
     fn is_file(&self, path: &Path) -> bool {
-        self.files.contains(path)
+        match self.vpath(path).and_then(|p| Ok(p.metadata()?)) {
+            Ok(m) => m.file_type == VfsFileType::File,
+            Err(_) => false,
+        }
     }
 
     fn write(&self, path: &Path, contents: &[u8]) -> anyhow::Result<()> {
+        if let Some(parent) = path.parent() {
+            self.ensure_dir(parent)?;
+        }
+
+        let file = self.vpath(path)?;
+        let mut w = file.create_file()?;
+        use std::io::Write;
+        w.write_all(contents)?;
+
         let mut writes = self.writes.lock().unwrap();
-        writes.insert(path.to_path_buf(), contents.to_vec());
+        writes.push((path.to_path_buf(), contents.to_vec()));
         Ok(())
     }
 
@@ -109,117 +140,90 @@ fn set_test_path(paths: &[PathBuf]) -> std::ffi::OsString {
     env::join_paths(paths).unwrap()
 }
 
-#[test]
-fn scan_dir_with_mock_fs_solo_leveling_tv2_groups_episodes() {
-    let mut fs = MockFs::default();
+#[derive(Debug, Deserialize)]
+struct FixtureInput {
+    root: String,
+    player: String,
+    path_dirs: Vec<String>,
+    binaries: Vec<String>,
+    files: Value,
+    #[serde(default)]
+    expected_windows_writes: std::collections::BTreeMap<String, String>,
+    #[serde(default)]
+    expected_unix_writes: std::collections::BTreeMap<String, String>,
+}
 
-    let root = PathBuf::from("root");
-    let rus = root.join("RUS Sound");
-    let sub = root.join("SUB");
+fn norm_path_for_compare(path: &Path) -> String {
+    path.to_string_lossy().replace('\\', "/")
+}
 
-    fs.add_dir(root.clone());
-    fs.add_child_dir(root.clone(), rus.clone());
-    fs.add_child_dir(root.clone(), sub.clone());
-
-    for ep in 13..=25 {
-        let hash = format!("HASH{ep:02}");
-
-        let mkv = root.join(format!(
-            "[SubsPlease] Solo Leveling - {ep:02} (1080p) [{hash}].mkv"
-        ));
-        fs.add_file(mkv);
-
-        let mka = rus.join(format!(
-            "[SubsPlease] Solo Leveling - {ep:02} (1080p) [{hash}].mka"
-        ));
-        fs.add_file(mka);
-
-        let ass = sub.join(format!(
-            "[SubsPlease] Solo Leveling - {ep:02} (1080p) [{hash}].ass"
-        ));
-        fs.add_file(ass);
-    }
-
-    let (structure, font_dir) = media_scan::scan_dir_with(&fs, &root).unwrap();
-
-    assert_eq!(font_dir, None);
-    assert_eq!(structure.len(), 13);
-
-    for ep in 13..=25 {
-        let entry = structure.get(&ep).unwrap();
-        assert!(entry.video.is_some());
-        assert_eq!(entry.audio.len(), 1);
-        assert_eq!(entry.subtitles.len(), 1);
+fn populate_tree(fs: &VfsFs, base: &Path, node: &Value) {
+    match node {
+        Value::String(contents) => {
+            fs.put_file(base, contents.as_bytes()).unwrap();
+        }
+        Value::Object(map) => {
+            fs.ensure_dir(base).unwrap();
+            for (name, child) in map {
+                populate_tree(fs, &base.join(name), child);
+            }
+        }
+        _ => {
+            panic!("Invalid fixture node for {}", base.display());
+        }
     }
 }
 
 #[test]
-fn is_program_in_path_with_mock_fs_uses_fs_for_existence() {
+fn golden_fixture_solo_leveling() {
     let _guard = env_lock().lock().unwrap();
 
-    let mut fs = MockFs::default();
+    let input: FixtureInput = serde_json::from_str(include_str!(
+        "fixtures/solo-leveling.json"
+    ))
+    .unwrap();
 
-    let bin1 = PathBuf::from("bin1");
-    let bin2 = PathBuf::from("bin2");
-    fs.add_dir(bin1.clone());
-    fs.add_dir(bin2.clone());
+    let expected = {
+        #[cfg(windows)]
+        {
+            &input.expected_windows_writes
+        }
 
-    // Create a "mpv" file in bin2 that matches whatever decorate_program_name does on this OS.
-    let decorated = os::decorate_program_name("mpv");
-    fs.add_file(bin2.join(decorated));
+        #[cfg(not(windows))]
+        {
+            &input.expected_unix_writes
+        }
+    };
 
-    let old_path = env::var_os("PATH");
-    env::set_var("PATH", set_test_path(&[bin1.clone(), bin2.clone()]));
+    let fs = VfsFs::default();
+    let root = PathBuf::from(&input.root);
 
-    let ok = os::is_program_in_path_with(&fs, "mpv");
+    fs.ensure_dir(&root).unwrap();
 
-    if let Some(p) = old_path {
-        env::set_var("PATH", p);
-    } else {
-        env::remove_var("PATH");
+    populate_tree(&fs, &root, &input.files);
+
+    for d in &input.path_dirs {
+        fs.ensure_dir(&PathBuf::from(d)).unwrap();
     }
 
-    assert!(ok);
-}
-
-#[test]
-fn app_run_with_mock_fs_writes_scripts() {
-    let _guard = env_lock().lock().unwrap();
-
-    let mut fs = MockFs::default();
-
-    let root = PathBuf::from("root");
-    let rus = root.join("RUS Sound");
-    let sub = root.join("SUB");
-
-    fs.add_dir(root.clone());
-    fs.add_child_dir(root.clone(), rus.clone());
-    fs.add_child_dir(root.clone(), sub.clone());
-
-    for ep in 13..=14 {
-        let hash = format!("HASH{ep:02}");
-
-        fs.add_file(root.join(format!(
-            "[SubsPlease] Solo Leveling - {ep:02} (1080p) [{hash}].mkv"
-        )));
-        fs.add_file(rus.join(format!(
-            "[SubsPlease] Solo Leveling - {ep:02} (1080p) [{hash}].mka"
-        )));
-        fs.add_file(sub.join(format!(
-            "[SubsPlease] Solo Leveling - {ep:02} (1080p) [{hash}].ass"
-        )));
+    for bin in &input.binaries {
+        let decorated = os::decorate_program_name(bin);
+        fs.create_file(&PathBuf::from("bin").join(decorated)).unwrap();
     }
 
-    let bin = PathBuf::from("bin");
-    fs.add_dir(bin.clone());
-    fs.add_file(bin.join(os::decorate_program_name("mpv")));
-
     let old_path = env::var_os("PATH");
-    env::set_var("PATH", set_test_path(&[bin.clone()]));
+    let path_dirs = input.path_dirs.iter().map(PathBuf::from).collect::<Vec<_>>();
+    env::set_var("PATH", set_test_path(&path_dirs));
+
+    let player = match input.player.as_str() {
+        "mpv" => players::PlayerKind::Mpv,
+        "vlc" => players::PlayerKind::Vlc,
+        other => panic!("Unknown player kind in fixture: {other}"),
+    };
 
     let args = app::Args {
         root_dir: Some(root.clone()),
-        player: Some(players::PlayerKind::Mpv),
+        player: Some(player),
     };
 
     let result = app::run_with(&fs, args);
@@ -232,8 +236,16 @@ fn app_run_with_mock_fs_writes_scripts() {
 
     result.unwrap();
 
-    let ext = os::script_ext();
     let writes = fs.writes.lock().unwrap();
-    assert!(writes.contains_key(&root.join(format!("13.{ext}"))));
-    assert!(writes.contains_key(&root.join(format!("14.{ext}"))));
+    let actual: std::collections::BTreeMap<String, String> = writes
+        .iter()
+        .map(|(p, bytes)| {
+            (
+                norm_path_for_compare(p),
+                String::from_utf8_lossy(bytes).to_string(),
+            )
+        })
+        .collect();
+
+    assert_eq!(*expected, actual);
 }

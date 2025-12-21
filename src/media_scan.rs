@@ -133,6 +133,12 @@ pub fn scan_dir_with(
     let mut font_dir: Option<PathBuf> = None;
 
     read_dir_recursive(fs_access, dir_path, &mut structure, &mut font_dir)?;
+
+    for value in structure.values_mut() {
+        value.audio.sort();
+        value.subtitles.sort();
+    }
+
     Ok((structure, font_dir))
 }
 
@@ -159,9 +165,11 @@ fn read_dir_recursive(
     structure: &mut BTreeMap<u32, EpisodeFiles>,
     font_dir: &mut Option<PathBuf>,
 ) -> Result<()> {
-    let entries = fs_access
+    let mut entries = fs_access
         .read_dir_paths(dir_path)
         .with_context(|| format!("Failed to read directory {}", dir_path.display()))?;
+
+    entries.sort();
 
     for entry in entries {
         let path = entry;
