@@ -113,8 +113,16 @@ fn set_test_path(paths: &[PathBuf]) -> std::ffi::OsString {
 }
 
 #[derive(Debug, Deserialize)]
+struct RootPaths {
+    #[allow(dead_code)]
+    windows: String,
+    #[allow(dead_code)]
+    linux: String,
+}
+
+#[derive(Debug, Deserialize)]
 struct FixtureInput {
-    root: String,
+    root: RootPaths,
     player: String,
     path_dirs: Vec<String>,
     binaries: Vec<String>,
@@ -144,12 +152,28 @@ fn populate_tree(fs: &mut MockFs, base: &Path, node: &Value) {
     }
 }
 
-#[test]
-fn golden_fixture_solo_leveling() {
-    let _guard = env_lock().lock().unwrap();
+fn run_fixture(fixture_path: &Path, fixture_json: &str) {
+    let input: FixtureInput = serde_json::from_str(fixture_json).unwrap_or_else(|e| {
+        panic!(
+            "Failed to parse fixture JSON {}: {e}",
+            fixture_path.to_string_lossy()
+        )
+    });
 
-    let input: FixtureInput =
-        serde_json::from_str(include_str!("fixtures/Solo Leveling TV-2.json")).unwrap();
+    let windows_root = PathBuf::from(&input.root.windows);
+
+    #[cfg(windows)]
+    let root = windows_root;
+
+    #[cfg(not(windows))]
+    let root = {
+        let windows_root_basename = windows_root
+            .file_name()
+            .and_then(|s| s.to_str())
+            .unwrap_or("")
+            .to_string();
+        PathBuf::from(&input.root.linux).join(&windows_root_basename)
+    };
 
     #[cfg(windows)]
     let expected = &input.expected_windows_writes;
@@ -158,7 +182,6 @@ fn golden_fixture_solo_leveling() {
     let expected = &input.expected_unix_writes;
 
     let mut fs = MockFs::default();
-    let root = PathBuf::from(&input.root);
 
     fs.add_dir(root.clone());
 
@@ -200,7 +223,12 @@ fn golden_fixture_solo_leveling() {
         env::remove_var("PATH");
     }
 
-    result.unwrap();
+    result.unwrap_or_else(|e| {
+        panic!(
+            "Fixture run failed for {}: {e}",
+            fixture_path.to_string_lossy()
+        )
+    });
 
     let writes = fs.writes.lock().unwrap();
     let actual: std::collections::BTreeMap<String, String> = writes
@@ -213,5 +241,84 @@ fn golden_fixture_solo_leveling() {
         })
         .collect();
 
-    assert_eq!(*expected, actual);
+    if *expected != actual {
+        let mut missing = Vec::new();
+        let mut extra = Vec::new();
+        let mut mismatched = Vec::new();
+
+        for (k, v_expected) in expected {
+            match actual.get(k) {
+                None => missing.push(k.clone()),
+                Some(v_actual) => {
+                    if v_actual != v_expected {
+                        mismatched.push(k.clone());
+                    }
+                }
+            }
+        }
+
+        for k in actual.keys() {
+            if !expected.contains_key(k) {
+                extra.push(k.clone());
+            }
+        }
+
+        let mut msg = String::new();
+        use std::fmt::Write as _;
+        let _ = writeln!(&mut msg, "Fixture mismatch: {}", fixture_path.display());
+        let _ = writeln!(&mut msg, "Expected keys: {}", expected.len());
+        let _ = writeln!(&mut msg, "Actual keys: {}", actual.len());
+        let _ = writeln!(&mut msg, "Missing keys: {}", missing.len());
+        let _ = writeln!(&mut msg, "Extra keys: {}", extra.len());
+        let _ = writeln!(&mut msg, "Mismatched contents: {}", mismatched.len());
+
+        for k in missing.iter().take(20) {
+            let _ = writeln!(&mut msg, "missing: {k}");
+        }
+        for k in extra.iter().take(20) {
+            let _ = writeln!(&mut msg, "extra: {k}");
+        }
+        for k in mismatched.iter().take(10) {
+            let v_expected = expected.get(k).unwrap();
+            let v_actual = actual.get(k).unwrap();
+            let _ = writeln!(&mut msg, "mismatch: {k}");
+            let _ = writeln!(&mut msg, "--- expected ---\n{v_expected}");
+            let _ = writeln!(&mut msg, "--- actual ---\n{v_actual}");
+        }
+
+        panic!("{msg}");
+    }
+}
+
+#[test]
+fn golden_fixtures() {
+    let _guard = env_lock().lock().unwrap();
+
+    let fixtures_dir = PathBuf::from(env!("CARGO_MANIFEST_DIR"))
+        .join("tests")
+        .join("fixtures");
+    let mut fixtures = std::fs::read_dir(&fixtures_dir)
+        .unwrap_or_else(|e| {
+            panic!(
+                "Failed to read fixtures dir {}: {e}",
+                fixtures_dir.display()
+            )
+        })
+        .filter_map(|e| e.ok())
+        .map(|e| e.path())
+        .filter(|p| p.extension().and_then(|s| s.to_str()) == Some("json"))
+        .collect::<Vec<_>>();
+
+    fixtures.sort();
+    assert!(
+        !fixtures.is_empty(),
+        "No fixtures found in {}",
+        fixtures_dir.display()
+    );
+
+    for fixture_path in fixtures {
+        let json = std::fs::read_to_string(&fixture_path)
+            .unwrap_or_else(|e| panic!("Failed to read fixture {}: {e}", fixture_path.display()));
+        run_fixture(&fixture_path, &json);
+    }
 }

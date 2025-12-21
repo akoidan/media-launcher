@@ -1,5 +1,8 @@
 {
-  "root": "D:\\movies\\Kimetsu.no.Yaiba.Katanakaji.no.Sato.hen.WEB-DL.1080p",
+  "root": {
+    "windows": "D:\\movies\\Kimetsu.no.Yaiba.Katanakaji.no.Sato.hen.WEB-DL.1080p",
+    "linux": "/home/andrew/ntfs/movies"
+  },
   "player": "mpv",
   "path_dirs": [
     "bin"

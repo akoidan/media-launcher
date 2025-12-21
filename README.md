@@ -28,7 +28,7 @@ cargo test --test mock_fs_tests
 ### Generate test fixtures
 
 ```sh
-cargo run -p xtask -- dump-fixture "D:\movies\Kimetsu.no.Yaiba.Katanakaji.no.Sato.hen.WEB-DL.1080p"
+cargo run -p xtask -- dump-fixture "D:\movies\Kaijuu 8 Gou TV-2 [WEB-DL 1080p]"
 ```
 
 Will create `tests\fixtures\Kimetsu.no.Yaiba.Katanakaji.no.Sato.hen.WEB-DL.1080p`

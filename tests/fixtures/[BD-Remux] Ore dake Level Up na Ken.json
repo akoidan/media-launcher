@@ -1,5 +1,8 @@
 {
-  "root": "D:\\movies\\[BD-Remux] Ore dake Level Up na Ken",
+  "root": {
+    "windows": "D:\\movies\\[BD-Remux] Ore dake Level Up na Ken",
+    "linux": "/home/andrew/ntfs/movies"
+  },
   "player": "mpv",
   "path_dirs": [
     "bin"

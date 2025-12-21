@@ -119,8 +119,14 @@ fn expected_key_abs(
 }
 
 #[derive(Debug, Serialize, Deserialize)]
+struct RootPaths {
+    windows: String,
+    linux: String,
+}
+
+#[derive(Debug, Serialize, Deserialize)]
 struct FixtureOut {
-    root: String,
+    root: RootPaths,
     player: String,
     path_dirs: Vec<String>,
     binaries: Vec<String>,
@@ -133,6 +139,18 @@ fn dump_fixture(input_dir: PathBuf) -> Result<()> {
     let root = input_dir
         .canonicalize()
         .with_context(|| format!("Failed to canonicalize {}", input_dir.display()))?;
+
+    let windows_root_str = normalize_root_string(&root);
+    let root_dir_name = root
+        .file_name()
+        .and_then(|s| s.to_str())
+        .filter(|s| !s.is_empty())
+        .ok_or_else(|| {
+            anyhow::anyhow!("Could not determine directory name from {}", root.display())
+        })?
+        .to_string();
+    let linux_root_base = "/home/andrew/ntfs/movies";
+    let linux_root_str = format!("{linux_root_base}/{root_dir_name}");
 
     let mut files_tree = Map::<String, Value>::new();
     let mut expected_windows_writes = BTreeMap::<String, String>::new();
@@ -158,7 +176,13 @@ fn dump_fixture(input_dir: PathBuf) -> Result<()> {
             let ext = ext.to_ascii_lowercase();
 
             if ext == "cmd" {
-                let key = expected_key_abs(&root, &path, '\\', false)?;
+                let parts = rel_parts(&root, &path)?;
+                let rel = parts.join("\\");
+                let key = if windows_root_str.ends_with('\\') {
+                    format!("{windows_root_str}{rel}")
+                } else {
+                    format!("{windows_root_str}\\{rel}")
+                };
                 let contents = fs::read_to_string(&path)
                     .with_context(|| format!("Failed to read {}", path.display()))?;
                 expected_windows_writes.insert(key, contents);
@@ -166,7 +190,13 @@ fn dump_fixture(input_dir: PathBuf) -> Result<()> {
             }
 
             if ext == "bash" {
-                let key = expected_key_abs(&root, &path, '/', true)?;
+                let parts = rel_parts(&root, &path)?;
+                let rel = parts.join("/");
+                let key = if linux_root_str.ends_with('/') {
+                    format!("{linux_root_str}{rel}")
+                } else {
+                    format!("{linux_root_str}/{rel}")
+                };
                 let contents = fs::read_to_string(&path)
                     .with_context(|| format!("Failed to read {}", path.display()))?;
                 expected_unix_writes.insert(key, contents);
@@ -179,7 +209,10 @@ fn dump_fixture(input_dir: PathBuf) -> Result<()> {
     }
 
     let fixture = FixtureOut {
-        root: normalize_root_string(&root),
+        root: RootPaths {
+            windows: windows_root_str,
+            linux: linux_root_base.to_string(),
+        },
         player: "mpv".to_string(),
         path_dirs: vec!["bin".to_string()],
         binaries: vec!["mpv".to_string()],
@@ -189,13 +222,7 @@ fn dump_fixture(input_dir: PathBuf) -> Result<()> {
     };
 
     let out_path = {
-        let base = root
-            .file_name()
-            .and_then(|s| s.to_str())
-            .filter(|s| !s.is_empty())
-            .ok_or_else(|| {
-                anyhow::anyhow!("Could not determine directory name from {}", root.display())
-            })?;
+        let base = root_dir_name;
         let mut p = PathBuf::from(env!("CARGO_MANIFEST_DIR"));
         p.pop();
         p.push("tests");

@@ -1,5 +1,8 @@
 {
-  "root": "D:\\movies\\Solo Leveling TV-2",
+  "root": {
+    "windows": "D:\\movies\\Solo Leveling TV-2",
+    "linux": "/home/andrew/ntfs/movies"
+  },
   "player": "mpv",
   "path_dirs": [
     "bin"
