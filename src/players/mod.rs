@@ -3,7 +3,7 @@ use std::path::PathBuf;
 use anyhow::{anyhow, Result};
 use clap::ValueEnum;
 
-use crate::EpisodeFiles;
+use crate::media_scan::EpisodeFiles;
 use crate::os;
 
 mod mpv;
