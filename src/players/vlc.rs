@@ -8,12 +8,12 @@ impl Player for VlcPlayer {
     fn program_name(&self) -> &'static str {
         #[cfg(windows)]
         {
-            return "vlc.exe";
+            "vlc.exe"
         }
 
         #[cfg(not(windows))]
         {
-            return "vlc";
+            "vlc"
         }
     }
 

@@ -8,12 +8,12 @@ impl Player for MpvPlayer {
     fn program_name(&self) -> &'static str {
         #[cfg(windows)]
         {
-            return "mpv.exe";
+            "mpv.exe"
         }
 
         #[cfg(not(windows))]
         {
-            return "mpv";
+            "mpv"
         }
     }
 
