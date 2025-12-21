@@ -25,7 +25,7 @@ use std::{
     sync::{Mutex, OnceLock},
 };
 
-use common::{populate_tree, MockFs};
+use common::{build_mock_fs, MockFs};
 
 fn env_lock() -> &'static Mutex<()> {
     static LOCK: OnceLock<Mutex<()>> = OnceLock::new();
@@ -59,87 +59,77 @@ struct FixtureInput {
     expected_unix_writes: std::collections::BTreeMap<String, String>,
 }
 
-fn run_fixture(fixture_path: &Path, fixture_json: &str) {
-    let input: FixtureInput = serde_json::from_str(fixture_json).unwrap_or_else(|e| {
+fn parse_fixture_input(fixture_path: &Path, fixture_json: &str) -> FixtureInput {
+    serde_json::from_str(fixture_json).unwrap_or_else(|e| {
         panic!(
             "Failed to parse fixture JSON {}: {e}",
             fixture_path.to_string_lossy()
         )
-    });
+    })
+}
 
+fn resolve_root(fixture_path: &Path, input: &FixtureInput) -> PathBuf {
     #[cfg(windows)]
-    let windows_root = PathBuf::from(&input.root.windows);
-
-    #[cfg(windows)]
-    let root = windows_root;
+    {
+        PathBuf::from(&input.root.windows)
+    }
 
     #[cfg(not(windows))]
-    let root = {
+    {
         let fixture_stem = fixture_path
             .file_stem()
             .and_then(|s| s.to_str())
             .unwrap_or("")
             .to_string();
         PathBuf::from(&input.root.linux).join(&fixture_stem)
-    };
+    }
+}
 
+fn expected_writes(input: &FixtureInput) -> &std::collections::BTreeMap<String, String> {
     #[cfg(windows)]
-    let expected = &input.expected_windows_writes;
+    {
+        &input.expected_windows_writes
+    }
 
     #[cfg(not(windows))]
-    let expected = &input.expected_unix_writes;
-
-    let mut fs = MockFs::default();
-
-    fs.add_dir(root.clone());
-
-    populate_tree(&mut fs, &root, &input.files);
-
-    for d in &input.path_dirs {
-        fs.add_dir(PathBuf::from(d));
+    {
+        &input.expected_unix_writes
     }
+}
 
-    for bin in &input.binaries {
-        let decorated = os::decorate_program_name(bin);
-        fs.add_file(PathBuf::from("bin").join(decorated));
+struct PathGuard {
+    old_path: Option<std::ffi::OsString>,
+}
+
+impl PathGuard {
+    fn set(paths: &[PathBuf]) -> Self {
+        let old_path = env::var_os("PATH");
+        env::set_var("PATH", set_test_path(paths));
+        Self { old_path }
     }
+}
 
-    let old_path = env::var_os("PATH");
-    let path_dirs = input
-        .path_dirs
-        .iter()
-        .map(PathBuf::from)
-        .collect::<Vec<_>>();
-    env::set_var("PATH", set_test_path(&path_dirs));
+impl Drop for PathGuard {
+    fn drop(&mut self) {
+        if let Some(p) = self.old_path.take() {
+            env::set_var("PATH", p);
+        } else {
+            env::remove_var("PATH");
+        }
+    }
+}
 
-    let player = match input.player.as_str() {
+fn resolve_player_kind(input: &FixtureInput) -> players::PlayerKind {
+    match input.player.as_str() {
         "mpv" => players::PlayerKind::Mpv,
         "vlc" => players::PlayerKind::Vlc,
         other => panic!("Unknown player kind in fixture: {other}"),
-    };
-
-    let args = app::Args {
-        root_dir: Some(root.clone()),
-        player: Some(player),
-    };
-
-    let result = app::run_with(&fs, args);
-
-    if let Some(p) = old_path {
-        env::set_var("PATH", p);
-    } else {
-        env::remove_var("PATH");
     }
+}
 
-    result.unwrap_or_else(|e| {
-        panic!(
-            "Fixture run failed for {}: {e}",
-            fixture_path.to_string_lossy()
-        )
-    });
-
+fn collect_writes(fs: &MockFs) -> std::collections::BTreeMap<String, String> {
     let writes = fs.writes.lock().unwrap();
-    let actual: std::collections::BTreeMap<String, String> = writes
+    writes
         .iter()
         .map(|(p, bytes)| {
             (
@@ -147,15 +137,56 @@ fn run_fixture(fixture_path: &Path, fixture_json: &str) {
                 String::from_utf8_lossy(bytes).to_string(),
             )
         })
-        .collect();
+        .collect()
+}
 
+fn assert_fixture_writes(
+    fixture_path: &Path,
+    expected: &std::collections::BTreeMap<String, String>,
+    actual: &std::collections::BTreeMap<String, String>,
+) {
     let expected_json = serde_json::to_string_pretty(expected).unwrap();
-    let actual_json = serde_json::to_string_pretty(&actual).unwrap();
+    let actual_json = serde_json::to_string_pretty(actual).unwrap();
 
     pretty_assertions::assert_eq!(
         format!("Fixture mismatch: {}\n{expected_json}", fixture_path.display()),
         format!("Fixture mismatch: {}\n{actual_json}", fixture_path.display()),
     );
+}
+
+fn run_fixture(fixture_path: &Path, fixture_json: &str) {
+    let input = parse_fixture_input(fixture_path, fixture_json);
+    let root = resolve_root(fixture_path, &input);
+    let expected = expected_writes(&input);
+    let fs = build_mock_fs(
+        &root,
+        &input.files,
+        &input.path_dirs,
+        &input.binaries,
+        os::decorate_program_name,
+    );
+
+    let path_dirs = input
+        .path_dirs
+        .iter()
+        .map(PathBuf::from)
+        .collect::<Vec<_>>();
+    let _path_guard = PathGuard::set(&path_dirs);
+
+    let args = app::Args {
+        root_dir: Some(root),
+        player: Some(resolve_player_kind(&input)),
+    };
+
+    app::run_with(&fs, args).unwrap_or_else(|e| {
+        panic!(
+            "Fixture run failed for {}: {e}",
+            fixture_path.to_string_lossy()
+        )
+    });
+
+    let actual = collect_writes(&fs);
+    assert_fixture_writes(fixture_path, expected, &actual);
 }
 
 #[test]

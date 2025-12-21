@@ -100,3 +100,27 @@ pub fn populate_tree(fs: &mut MockFs, base: &Path, node: &Value) {
         }
     }
 }
+
+pub fn build_mock_fs(
+    root: &Path,
+    files: &Value,
+    path_dirs: &[String],
+    binaries: &[String],
+    decorate_program_name: impl Fn(&str) -> String,
+) -> MockFs {
+    let mut fs = MockFs::default();
+
+    fs.add_dir(root.to_path_buf());
+    populate_tree(&mut fs, root, files);
+
+    for d in path_dirs {
+        fs.add_dir(PathBuf::from(d));
+    }
+
+    for bin in binaries {
+        let decorated = decorate_program_name(bin);
+        fs.add_file(PathBuf::from("bin").join(decorated));
+    }
+
+    fs
+}
