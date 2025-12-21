@@ -45,6 +45,55 @@ fn extract_episode_number(file_name: &str, re_e: &Regex, re_2d: &Regex) -> Optio
         .and_then(|m| m.as_str().parse::<u32>().ok())
 }
 
+fn handle_media_file(
+    path: PathBuf,
+    structure: &mut BTreeMap<u32, EpisodeFiles>,
+    re_e: &Regex,
+    re_2d: &Regex,
+) -> Result<()> {
+    if is_script_file(&path) {
+        return Ok(());
+    }
+
+    if !is_supported_file(&path) {
+        let name = path
+            .file_name()
+            .and_then(OsStr::to_str)
+            .unwrap_or("<unknown>");
+        eprintln!("Unkown file {name}");
+        return Ok(());
+    }
+
+    let file_name = path
+        .file_name()
+        .and_then(OsStr::to_str)
+        .ok_or_else(|| anyhow!("Cannot read file name for {}", path.display()))?;
+
+    let Some(episode) = extract_episode_number(file_name, re_e, re_2d) else {
+        eprintln!("file {file_name} doesn't have epoisode #");
+        return Ok(());
+    };
+
+    let slot = structure.entry(episode).or_default();
+
+    match path
+        .extension()
+        .and_then(OsStr::to_str)
+        .unwrap_or("")
+        .to_ascii_lowercase()
+        .as_str()
+    {
+        "mkv" => slot.video = Some(path),
+        "ass" => slot.subtitles.push(path),
+        "mka" => slot.audio.push(path),
+        _ => {
+            // ignore (e.g. ttf)
+        }
+    }
+
+    Ok(())
+}
+
 fn read_dir_recursive(
     dir_path: &Path,
     structure: &mut BTreeMap<u32, EpisodeFiles>,
@@ -72,39 +121,7 @@ fn read_dir_recursive(
         }
 
         if file_type.is_file() {
-            if is_script_file(&path) {
-                continue;
-            }
-
-            if !is_supported_file(&path) {
-                let name = path
-                    .file_name()
-                    .and_then(OsStr::to_str)
-                    .unwrap_or("<unknown>");
-                eprintln!("Unkown file {name}");
-                continue;
-            }
-
-            let file_name = path
-                .file_name()
-                .and_then(OsStr::to_str)
-                .ok_or_else(|| anyhow!("Cannot read file name for {}", path.display()))?;
-
-            let Some(episode) = extract_episode_number(file_name, re_e, re_2d) else {
-                eprintln!("file {file_name} doesn't have epoisode #");
-                continue;
-            };
-
-            let slot = structure.entry(episode).or_default();
-
-            match path.extension().and_then(OsStr::to_str).unwrap_or("").to_ascii_lowercase().as_str() {
-                "mkv" => slot.video = Some(path),
-                "ass" => slot.subtitles.push(path),
-                "mka" => slot.audio.push(path),
-                _ => {
-                    // ignore (e.g. ttf)
-                }
-            }
+            handle_media_file(path, structure, re_e, re_2d)?;
         }
     }
 
