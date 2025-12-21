@@ -18,7 +18,6 @@ struct Args {
     player: Option<players::PlayerKind>,
 }
 
-
 fn main() -> Result<()> {
     let args = Args::parse();
 

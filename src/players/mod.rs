@@ -39,7 +39,10 @@ pub fn resolve_player(requested: Option<PlayerKind>) -> Result<Box<dyn Player>> 
     let kind = match requested {
         Some(kind) => {
             if !kind.is_available() {
-                return Err(anyhow!("Player '{}' not found in PATH", kind.decorated_name()));
+                return Err(anyhow!(
+                    "Player '{}' not found in PATH",
+                    kind.decorated_name()
+                ));
             }
             kind
         }
