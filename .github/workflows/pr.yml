@@ -1,0 +1,117 @@
+name: pr
+
+on:
+  pull_request:
+    types:
+      - opened
+      - reopened
+      - synchronize
+
+concurrency:
+  group: ${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  lint:
+    runs-on: ubuntu-22.04
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v6
+        with:
+          package-manager-cache: false
+          node-version: 24
+      - name: Restore node_modules cache
+        id: cache-node
+        # DO not create cache for PRs, since they are not accessible withing different PRs
+        # Only restore them
+        uses: actions/cache/restore@v4
+        with:
+          path: node_modules
+          key: ${{ runner.os }}-node-modules-${{ hashFiles('yarn.lock') }}
+      - name: Install yarn deps
+        if: steps.cache-node.outputs.cache-hit != 'true'
+        run: yarn install --frozen-lockfile
+      - name: Lint
+        run: yarn lint
+
+  test:
+    runs-on: ubuntu-22.04
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v6
+        with:
+          package-manager-cache: false
+          node-version: 24
+      - name: Restore node_modules cache
+        id: cache-node
+        # DO not create cache for PRs, since they are not accessible withing different PRs
+        # Only restore them
+        uses: actions/cache/restore@v4
+        with:
+          path: node_modules
+          key: ${{ runner.os }}-node-modules-${{ hashFiles('yarn.lock') }}
+      - name: Install yarn deps
+        if: steps.cache-node.outputs.cache-hit != 'true'
+        run: yarn install --frozen-lockfile
+      - name: Tests
+        run: yarn jest
+
+  linux:
+    runs-on: ubuntu-24.04
+    permissions: write-all
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends libv4l-dev
+
+      - uses: actions/setup-node@v6
+        with:
+          package-manager-cache: false
+          node-version: 24
+      - name: Restore node_modules cache
+        id: cache-node
+        # DO not create cache for PRs, since they are not accessible withing different PRs
+        # Only restore them
+        uses: actions/cache/restore@v4
+        with:
+          path: node_modules
+          key: ${{ runner.os }}-node-modules-${{ hashFiles('yarn.lock') }}
+      - name: Install yarn deps
+        if: steps.cache-node.outputs.cache-hit != 'true'
+        run: yarn install --frozen-lockfile
+      - name: Cmake
+        run: yarn cmake
+
+  win32:
+    runs-on: windows-2022
+    permissions: write-all
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v6
+        with:
+          package-manager-cache: false
+          node-version: 24
+      - name: Restore node_modules cache
+        id: cache-node
+        # DO not create cache for PRs, since they are not accessible withing different PRs
+        # Only restore them
+        uses: actions/cache/restore@v4
+        with:
+          path: node_modules
+          key: ${{ runner.os }}-node-modules-${{ hashFiles('yarn.lock') }}
+      - name: Install yarn deps
+        if: steps.cache-node.outputs.cache-hit != 'true'
+        run: yarn install --frozen-lockfile
+      - name: Cmake
+        run: yarn cmake
+      - name: Nest
+        run: yarn nest
+
+      - name: Bundle everything to a single file
+        run: yarn esbuild
+
+      - name: Create a windows executable
+        run: yarn native
