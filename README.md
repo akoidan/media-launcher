@@ -59,7 +59,36 @@ Example:
 cargo run -- "/media/Shows/MyShow/Season 01"
 ```
 
-Build a release binary:
+## Development (formatting & linting)
+
+This repo includes `rust-toolchain.toml` which pins the toolchain channel and requests the `rustfmt` and `clippy` components.
+
+Local setup (requires `rustup`):
+
+```bash
+rustup toolchain install stable
+```
+
+Format check:
+
+```bash
+cargo fmt --all -- --check
+```
+
+Lint (Clippy):
+
+```bash
+cargo clippy --all-targets --all-features -- -D warnings
+```
+
+If you have a rustup-managed toolchain, you can also use the provided cargo aliases:
+
+```bash
+cargo fmt-check
+cargo lint
+```
+
+## Build a release binary:
 
 ```bash
 cargo build --release

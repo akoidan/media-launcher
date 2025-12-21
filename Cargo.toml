@@ -8,3 +8,9 @@ anyhow = "1"
 clap = { version = "4", features = ["derive"] }
 regex = "1"
 rfd = "0.14.1"
+
+[lints.rust]
+unsafe_code = "forbid"
+
+[lints.clippy]
+all = "warn"
