@@ -145,3 +145,12 @@ Season 01/
 ```
 
 Running `media-launcher` on `Season 01/` will generate `01.bash`/`01.cmd`, `02.bash`/`02.cmd`, etc.
+
+
+
+## Tests
+
+```sh
+cargo run --bin dump_fixture -- "D:\movies\[BD-Remux] Ore dake Level Up na Ken"
+```
+Will create `tests\fixtures\[BD-Remux] Ore dake Level Up na Ken.json`

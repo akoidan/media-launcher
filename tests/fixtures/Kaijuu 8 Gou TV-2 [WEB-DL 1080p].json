@@ -1,0 +1,168 @@
+{
+  "root": "D:\\movies\\Kaijuu 8 Gou TV-2 [WEB-DL 1080p]",
+  "player": "mpv",
+  "path_dirs": [
+    "bin"
+  ],
+  "binaries": [
+    "mpv"
+  ],
+  "files": {
+    "ENG Sound": {
+      "Kaijuu 8 Gou TV-2 - 01 [1080p CR WEB-DL AVC AAC].CR.DUB.eng.mka": "",
+      "Kaijuu 8 Gou TV-2 - 02 [1080p CR WEB-DL AVC AAC].CR.DUB.eng.mka": "",
+      "Kaijuu 8 Gou TV-2 - 03 [1080p CR WEB-DL AVC AAC].CR.DUB.eng.mka": "",
+      "Kaijuu 8 Gou TV-2 - 04 [1080p CR WEB-DL AVC AAC].CR.DUB.eng.mka": "",
+      "Kaijuu 8 Gou TV-2 - 05 [1080p CR WEB-DL AVC AAC].CR.DUB.eng.mka": "",
+      "Kaijuu 8 Gou TV-2 - 06 [1080p CR WEB-DL AVC AAC].CR.DUB.eng.mka": "",
+      "Kaijuu 8 Gou TV-2 - 07 [1080p CR WEB-DL AVC AAC].CR.DUB.eng.mka": "",
+      "Kaijuu 8 Gou TV-2 - 08 [1080p CR WEB-DL AVC AAC].CR.DUB.eng.mka": "",
+      "Kaijuu 8 Gou TV-2 - 09 [1080p CR WEB-DL AVC AAC].CR.DUB.eng.mka": "",
+      "Kaijuu 8 Gou TV-2 - 10 [1080p CR WEB-DL AVC AAC].CR.DUB.eng.mka": "",
+      "Kaijuu 8 Gou TV-2 - 11 [1080p CR WEB-DL AVC AAC].CR.DUB.eng.mka": ""
+    },
+    "ENG Subs": {
+      "Kaijuu 8 Gou TV-2 - 01 [1080p CR WEB-DL AVC AAC].CR.full.eng.ass": "",
+      "Kaijuu 8 Gou TV-2 - 02 [1080p CR WEB-DL AVC AAC].CR.full.eng.ass": "",
+      "Kaijuu 8 Gou TV-2 - 03 [1080p CR WEB-DL AVC AAC].CR.full.eng.ass": "",
+      "Kaijuu 8 Gou TV-2 - 04 [1080p CR WEB-DL AVC AAC].CR.full.eng.ass": "",
+      "Kaijuu 8 Gou TV-2 - 05 [1080p CR WEB-DL AVC AAC].CR.full.eng.ass": "",
+      "Kaijuu 8 Gou TV-2 - 06 [1080p CR WEB-DL AVC AAC].CR.full.eng.ass": "",
+      "Kaijuu 8 Gou TV-2 - 07 [1080p CR WEB-DL AVC AAC].CR.full.eng.ass": "",
+      "Kaijuu 8 Gou TV-2 - 08 [1080p CR WEB-DL AVC AAC].CR.full.eng.ass": "",
+      "Kaijuu 8 Gou TV-2 - 09 [1080p CR WEB-DL AVC AAC].CR.full.eng.ass": "",
+      "Kaijuu 8 Gou TV-2 - 10 [1080p CR WEB-DL AVC AAC].CR.full.eng.ass": "",
+      "Kaijuu 8 Gou TV-2 - 11 [1080p CR WEB-DL AVC AAC].CR.full.eng.ass": "",
+      "signs": {
+        "Kaijuu 8 Gou TV-2 - 01 [1080p CR WEB-DL AVC AAC].CR.signs.eng.ass": "",
+        "Kaijuu 8 Gou TV-2 - 02 [1080p CR WEB-DL AVC AAC].CR.signs.eng.ass": "",
+        "Kaijuu 8 Gou TV-2 - 03 [1080p CR WEB-DL AVC AAC].CR.signs.eng.ass": "",
+        "Kaijuu 8 Gou TV-2 - 04 [1080p CR WEB-DL AVC AAC].CR.signs.eng.ass": "",
+        "Kaijuu 8 Gou TV-2 - 05 [1080p CR WEB-DL AVC AAC].CR.signs.eng.ass": "",
+        "Kaijuu 8 Gou TV-2 - 06 [1080p CR WEB-DL AVC AAC].CR.signs.eng.ass": "",
+        "Kaijuu 8 Gou TV-2 - 07 [1080p CR WEB-DL AVC AAC].CR.signs.eng.ass": "",
+        "Kaijuu 8 Gou TV-2 - 08 [1080p CR WEB-DL AVC AAC].CR.signs.eng.ass": "",
+        "Kaijuu 8 Gou TV-2 - 09 [1080p CR WEB-DL AVC AAC].CR.signs.eng.ass": "",
+        "Kaijuu 8 Gou TV-2 - 10 [1080p CR WEB-DL AVC AAC].CR.signs.eng.ass": "",
+        "Kaijuu 8 Gou TV-2 - 11 [1080p CR WEB-DL AVC AAC].CR.signs.eng.ass": ""
+      }
+    },
+    "Fonts": {
+      "Avante Int (Bold).ttf": "",
+      "Book Antiqua (Bold Italic).ttf": "",
+      "Book Antiqua (Bold).ttf": "",
+      "Book Antiqua (Italic).ttf": "",
+      "Book Antiqua (Regular).ttf": "",
+      "Comic Sans MS (Regular).ttf": "",
+      "Etude Noire (Bold).ttf": "",
+      "Etude Noire (Regular).ttf": "",
+      "Etude Noire Light (Regular).ttf": "",
+      "Etude Noire Medium (Regular).ttf": "",
+      "Tahoma (Bold).ttf": "",
+      "Tahoma (Regular).ttf": "",
+      "Times New Roman (Bold Italic).ttf": "",
+      "Times New Roman (Bold).ttf": "",
+      "Times New Roman (Regular).ttf": "",
+      "Trebuchet MS (Bold).ttf": "",
+      "Trebuchet MS (Italic).ttf": "",
+      "Trebuchet MS (Regular).ttf": "",
+      "Verdana (Bold).ttf": "",
+      "Vinnytsia Sans (Bold).ttf": "",
+      "Vinnytsia Sans (Regular).ttf": ""
+    },
+    "Kaijuu 8 Gou TV-2 - 01 [1080p CR WEB-DL AVC AAC].mkv": "",
+    "Kaijuu 8 Gou TV-2 - 02 [1080p CR WEB-DL AVC AAC].mkv": "",
+    "Kaijuu 8 Gou TV-2 - 03 [1080p CR WEB-DL AVC AAC].mkv": "",
+    "Kaijuu 8 Gou TV-2 - 04 [1080p CR WEB-DL AVC AAC].mkv": "",
+    "Kaijuu 8 Gou TV-2 - 05 [1080p CR WEB-DL AVC AAC].mkv": "",
+    "Kaijuu 8 Gou TV-2 - 06 [1080p CR WEB-DL AVC AAC].mkv": "",
+    "Kaijuu 8 Gou TV-2 - 07 [1080p CR WEB-DL AVC AAC].mkv": "",
+    "Kaijuu 8 Gou TV-2 - 08 [1080p CR WEB-DL AVC AAC].mkv": "",
+    "Kaijuu 8 Gou TV-2 - 09 [1080p CR WEB-DL AVC AAC].mkv": "",
+    "Kaijuu 8 Gou TV-2 - 10 [1080p CR WEB-DL AVC AAC].mkv": "",
+    "Kaijuu 8 Gou TV-2 - 11 [1080p CR WEB-DL AVC AAC].mkv": "",
+    "RUS Sound": {
+      "AniLiberty": {
+        "Kaijuu 8 Gou TV-2 - 01 [1080p CR WEB-DL AVC AAC].AL.mka": "",
+        "Kaijuu 8 Gou TV-2 - 02 [1080p CR WEB-DL AVC AAC].AL.mka": "",
+        "Kaijuu 8 Gou TV-2 - 03 [1080p CR WEB-DL AVC AAC].AL.mka": "",
+        "Kaijuu 8 Gou TV-2 - 04 [1080p CR WEB-DL AVC AAC].AL.mka": "",
+        "Kaijuu 8 Gou TV-2 - 05 [1080p CR WEB-DL AVC AAC].AL.mka": "",
+        "Kaijuu 8 Gou TV-2 - 06 [1080p CR WEB-DL AVC AAC].AL.mka": "",
+        "Kaijuu 8 Gou TV-2 - 07 [1080p CR WEB-DL AVC AAC].AL.mka": "",
+        "Kaijuu 8 Gou TV-2 - 08 [1080p CR WEB-DL AVC AAC].AL.mka": "",
+        "Kaijuu 8 Gou TV-2 - 09 [1080p CR WEB-DL AVC AAC].AL.mka": "",
+        "Kaijuu 8 Gou TV-2 - 10 [1080p CR WEB-DL AVC AAC].AL.mka": "",
+        "Kaijuu 8 Gou TV-2 - 11 [1080p CR WEB-DL AVC AAC].AL.mka": ""
+      },
+      "StudioBand": {
+        "Kaijuu 8 Gou TV-2 - 01 [1080p CR WEB-DL AVC AAC].SB.mka": "",
+        "Kaijuu 8 Gou TV-2 - 02 [1080p CR WEB-DL AVC AAC].SB.mka": "",
+        "Kaijuu 8 Gou TV-2 - 03 [1080p CR WEB-DL AVC AAC].SB.mka": "",
+        "Kaijuu 8 Gou TV-2 - 04 [1080p CR WEB-DL AVC AAC].SB.mka": "",
+        "Kaijuu 8 Gou TV-2 - 05 [1080p CR WEB-DL AVC AAC].SB.mka": "",
+        "Kaijuu 8 Gou TV-2 - 06 [1080p CR WEB-DL AVC AAC].SB.mka": "",
+        "Kaijuu 8 Gou TV-2 - 07 [1080p CR WEB-DL AVC AAC].SB.mka": "",
+        "Kaijuu 8 Gou TV-2 - 08 [1080p CR WEB-DL AVC AAC].SB.mka": "",
+        "Kaijuu 8 Gou TV-2 - 09 [1080p CR WEB-DL AVC AAC].SB.mka": "",
+        "Kaijuu 8 Gou TV-2 - 10 [1080p CR WEB-DL AVC AAC].SB.mka": "",
+        "Kaijuu 8 Gou TV-2 - 11 [1080p CR WEB-DL AVC AAC].SB.mka": ""
+      }
+    },
+    "RUS Subs": {
+      "Crunchyroll": {
+        "Kaijuu 8 Gou TV-2 - 01 [1080p CR WEB-DL AVC AAC].CR.полные.rus.ass": "",
+        "Kaijuu 8 Gou TV-2 - 02 [1080p CR WEB-DL AVC AAC].CR.полные.rus.ass": "",
+        "Kaijuu 8 Gou TV-2 - 03 [1080p CR WEB-DL AVC AAC].CR.полные.rus.ass": "",
+        "Kaijuu 8 Gou TV-2 - 04 [1080p CR WEB-DL AVC AAC].CR.полные.rus.ass": "",
+        "Kaijuu 8 Gou TV-2 - 05 [1080p CR WEB-DL AVC AAC].CR.полные.rus.ass": "",
+        "Kaijuu 8 Gou TV-2 - 06 [1080p CR WEB-DL AVC AAC].CR.полные.rus.ass": "",
+        "Kaijuu 8 Gou TV-2 - 07 [1080p CR WEB-DL AVC AAC].CR.полные.rus.ass": "",
+        "Kaijuu 8 Gou TV-2 - 08 [1080p CR WEB-DL AVC AAC].CR.полные.rus.ass": "",
+        "Kaijuu 8 Gou TV-2 - 09 [1080p CR WEB-DL AVC AAC].CR.полные.rus.ass": "",
+        "Kaijuu 8 Gou TV-2 - 10 [1080p CR WEB-DL AVC AAC].CR.полные.rus.ass": "",
+        "Kaijuu 8 Gou TV-2 - 11 [1080p CR WEB-DL AVC AAC].CR.полные.rus.ass": ""
+      },
+      "Katsurasub": {
+        "Kaijuu 8 Gou TV-2 - 01 [1080p CR WEB-DL AVC AAC].KS.полные.rus.ass": "",
+        "Kaijuu 8 Gou TV-2 - 02 [1080p CR WEB-DL AVC AAC].KS.полные.rus.ass": "",
+        "Kaijuu 8 Gou TV-2 - 03 [1080p CR WEB-DL AVC AAC].KS.полные.rus.ass": "",
+        "Kaijuu 8 Gou TV-2 - 04 [1080p CR WEB-DL AVC AAC].KS.полные.rus.ass": "",
+        "Kaijuu 8 Gou TV-2 - 05 [1080p CR WEB-DL AVC AAC].KS.полные.rus.ass": "",
+        "Kaijuu 8 Gou TV-2 - 06 [1080p CR WEB-DL AVC AAC].KS.полные.rus.ass": "",
+        "Kaijuu 8 Gou TV-2 - 07 [1080p CR WEB-DL AVC AAC].KS.полные.rus.ass": "",
+        "Kaijuu 8 Gou TV-2 - 08 [1080p CR WEB-DL AVC AAC].KS.полные.rus.ass": "",
+        "Kaijuu 8 Gou TV-2 - 09 [1080p CR WEB-DL AVC AAC].KS.полные.rus.ass": "",
+        "Kaijuu 8 Gou TV-2 - 10 [1080p CR WEB-DL AVC AAC].KS.полные.rus.ass": "",
+        "Kaijuu 8 Gou TV-2 - 11 [1080p CR WEB-DL AVC AAC].KS.полные.rus.ass": ""
+      },
+      "надписи": {
+        "Kaijuu 8 Gou TV-2 - 01 [1080p CR WEB-DL AVC AAC].CR.надписи.rus.ass": "",
+        "Kaijuu 8 Gou TV-2 - 02 [1080p CR WEB-DL AVC AAC].CR.надписи.rus.ass": "",
+        "Kaijuu 8 Gou TV-2 - 03 [1080p CR WEB-DL AVC AAC].CR.надписи.rus.ass": "",
+        "Kaijuu 8 Gou TV-2 - 04 [1080p CR WEB-DL AVC AAC].CR.надписи.rus.ass": "",
+        "Kaijuu 8 Gou TV-2 - 05 [1080p CR WEB-DL AVC AAC].CR.надписи.rus.ass": "",
+        "Kaijuu 8 Gou TV-2 - 06 [1080p CR WEB-DL AVC AAC].CR.надписи.rus.ass": "",
+        "Kaijuu 8 Gou TV-2 - 07 [1080p CR WEB-DL AVC AAC].CR.надписи.rus.ass": "",
+        "Kaijuu 8 Gou TV-2 - 08 [1080p CR WEB-DL AVC AAC].CR.надписи.rus.ass": "",
+        "Kaijuu 8 Gou TV-2 - 09 [1080p CR WEB-DL AVC AAC].CR.надписи.rus.ass": "",
+        "Kaijuu 8 Gou TV-2 - 10 [1080p CR WEB-DL AVC AAC].CR.надписи.rus.ass": "",
+        "Kaijuu 8 Gou TV-2 - 11 [1080p CR WEB-DL AVC AAC].CR.надписи.rus.ass": ""
+      }
+    }
+  },
+  "expected_windows_writes": {},
+  "expected_unix_writes": {
+    "/home/andrew/ntfs/movies/Kaijuu 8 Gou TV-2 [WEB-DL 1080p]/01.bash": "mpv \"/home/andrew/ntfs/movies/Kaijuu 8 Gou TV-2 [WEB-DL 1080p]/Kaijuu 8 Gou TV-2 - 01 [1080p CR WEB-DL AVC AAC].mkv\" --audio-file=\"/home/andrew/ntfs/movies/Kaijuu 8 Gou TV-2 [WEB-DL 1080p]/ENG Sound/Kaijuu 8 Gou TV-2 - 01 [1080p CR WEB-DL AVC AAC].CR.DUB.eng.mka\" --audio-file=\"/home/andrew/ntfs/movies/Kaijuu 8 Gou TV-2 [WEB-DL 1080p]/RUS Sound/AniLiberty/Kaijuu 8 Gou TV-2 - 01 [1080p CR WEB-DL AVC AAC].AL.mka\" --audio-file=\"/home/andrew/ntfs/movies/Kaijuu 8 Gou TV-2 [WEB-DL 1080p]/RUS Sound/StudioBand/Kaijuu 8 Gou TV-2 - 01 [1080p CR WEB-DL AVC AAC].SB.mka\" --sub-file=\"/home/andrew/ntfs/movies/Kaijuu 8 Gou TV-2 [WEB-DL 1080p]/ENG Subs/Kaijuu 8 Gou TV-2 - 01 [1080p CR WEB-DL AVC AAC].CR.full.eng.ass\" --sub-file=\"/home/andrew/ntfs/movies/Kaijuu 8 Gou TV-2 [WEB-DL 1080p]/ENG Subs/signs/Kaijuu 8 Gou TV-2 - 01 [1080p CR WEB-DL AVC AAC].CR.signs.eng.ass\" --sub-file=\"/home/andrew/ntfs/movies/Kaijuu 8 Gou TV-2 [WEB-DL 1080p]/RUS Subs/Crunchyroll/Kaijuu 8 Gou TV-2 - 01 [1080p CR WEB-DL AVC AAC].CR.полные.rus.ass\" --sub-file=\"/home/andrew/ntfs/movies/Kaijuu 8 Gou TV-2 [WEB-DL 1080p]/RUS Subs/Katsurasub/Kaijuu 8 Gou TV-2 - 01 [1080p CR WEB-DL AVC AAC].KS.полные.rus.ass\" --sub-file=\"/home/andrew/ntfs/movies/Kaijuu 8 Gou TV-2 [WEB-DL 1080p]/RUS Subs/надписи/Kaijuu 8 Gou TV-2 - 01 [1080p CR WEB-DL AVC AAC].CR.надписи.rus.ass\" --sub-fonts-dir=\"/home/andrew/ntfs/movies/Kaijuu 8 Gou TV-2 [WEB-DL 1080p]/Fonts\"",
+    "/home/andrew/ntfs/movies/Kaijuu 8 Gou TV-2 [WEB-DL 1080p]/02.bash": "mpv \"/home/andrew/ntfs/movies/Kaijuu 8 Gou TV-2 [WEB-DL 1080p]/Kaijuu 8 Gou TV-2 - 02 [1080p CR WEB-DL AVC AAC].mkv\" --audio-file=\"/home/andrew/ntfs/movies/Kaijuu 8 Gou TV-2 [WEB-DL 1080p]/ENG Sound/Kaijuu 8 Gou TV-2 - 02 [1080p CR WEB-DL AVC AAC].CR.DUB.eng.mka\" --audio-file=\"/home/andrew/ntfs/movies/Kaijuu 8 Gou TV-2 [WEB-DL 1080p]/RUS Sound/AniLiberty/Kaijuu 8 Gou TV-2 - 02 [1080p CR WEB-DL AVC AAC].AL.mka\" --audio-file=\"/home/andrew/ntfs/movies/Kaijuu 8 Gou TV-2 [WEB-DL 1080p]/RUS Sound/StudioBand/Kaijuu 8 Gou TV-2 - 02 [1080p CR WEB-DL AVC AAC].SB.mka\" --sub-file=\"/home/andrew/ntfs/movies/Kaijuu 8 Gou TV-2 [WEB-DL 1080p]/ENG Subs/Kaijuu 8 Gou TV-2 - 02 [1080p CR WEB-DL AVC AAC].CR.full.eng.ass\" --sub-file=\"/home/andrew/ntfs/movies/Kaijuu 8 Gou TV-2 [WEB-DL 1080p]/ENG Subs/signs/Kaijuu 8 Gou TV-2 - 02 [1080p CR WEB-DL AVC AAC].CR.signs.eng.ass\" --sub-file=\"/home/andrew/ntfs/movies/Kaijuu 8 Gou TV-2 [WEB-DL 1080p]/RUS Subs/Crunchyroll/Kaijuu 8 Gou TV-2 - 02 [1080p CR WEB-DL AVC AAC].CR.полные.rus.ass\" --sub-file=\"/home/andrew/ntfs/movies/Kaijuu 8 Gou TV-2 [WEB-DL 1080p]/RUS Subs/Katsurasub/Kaijuu 8 Gou TV-2 - 02 [1080p CR WEB-DL AVC AAC].KS.полные.rus.ass\" --sub-file=\"/home/andrew/ntfs/movies/Kaijuu 8 Gou TV-2 [WEB-DL 1080p]/RUS Subs/надписи/Kaijuu 8 Gou TV-2 - 02 [1080p CR WEB-DL AVC AAC].CR.надписи.rus.ass\" --sub-fonts-dir=\"/home/andrew/ntfs/movies/Kaijuu 8 Gou TV-2 [WEB-DL 1080p]/Fonts\"",
+    "/home/andrew/ntfs/movies/Kaijuu 8 Gou TV-2 [WEB-DL 1080p]/03.bash": "mpv \"/home/andrew/ntfs/movies/Kaijuu 8 Gou TV-2 [WEB-DL 1080p]/Kaijuu 8 Gou TV-2 - 03 [1080p CR WEB-DL AVC AAC].mkv\" --audio-file=\"/home/andrew/ntfs/movies/Kaijuu 8 Gou TV-2 [WEB-DL 1080p]/ENG Sound/Kaijuu 8 Gou TV-2 - 03 [1080p CR WEB-DL AVC AAC].CR.DUB.eng.mka\" --audio-file=\"/home/andrew/ntfs/movies/Kaijuu 8 Gou TV-2 [WEB-DL 1080p]/RUS Sound/AniLiberty/Kaijuu 8 Gou TV-2 - 03 [1080p CR WEB-DL AVC AAC].AL.mka\" --audio-file=\"/home/andrew/ntfs/movies/Kaijuu 8 Gou TV-2 [WEB-DL 1080p]/RUS Sound/StudioBand/Kaijuu 8 Gou TV-2 - 03 [1080p CR WEB-DL AVC AAC].SB.mka\" --sub-file=\"/home/andrew/ntfs/movies/Kaijuu 8 Gou TV-2 [WEB-DL 1080p]/ENG Subs/Kaijuu 8 Gou TV-2 - 03 [1080p CR WEB-DL AVC AAC].CR.full.eng.ass\" --sub-file=\"/home/andrew/ntfs/movies/Kaijuu 8 Gou TV-2 [WEB-DL 1080p]/ENG Subs/signs/Kaijuu 8 Gou TV-2 - 03 [1080p CR WEB-DL AVC AAC].CR.signs.eng.ass\" --sub-file=\"/home/andrew/ntfs/movies/Kaijuu 8 Gou TV-2 [WEB-DL 1080p]/RUS Subs/Crunchyroll/Kaijuu 8 Gou TV-2 - 03 [1080p CR WEB-DL AVC AAC].CR.полные.rus.ass\" --sub-file=\"/home/andrew/ntfs/movies/Kaijuu 8 Gou TV-2 [WEB-DL 1080p]/RUS Subs/Katsurasub/Kaijuu 8 Gou TV-2 - 03 [1080p CR WEB-DL AVC AAC].KS.полные.rus.ass\" --sub-file=\"/home/andrew/ntfs/movies/Kaijuu 8 Gou TV-2 [WEB-DL 1080p]/RUS Subs/надписи/Kaijuu 8 Gou TV-2 - 03 [1080p CR WEB-DL AVC AAC].CR.надписи.rus.ass\" --sub-fonts-dir=\"/home/andrew/ntfs/movies/Kaijuu 8 Gou TV-2 [WEB-DL 1080p]/Fonts\"",
+    "/home/andrew/ntfs/movies/Kaijuu 8 Gou TV-2 [WEB-DL 1080p]/04.bash": "mpv \"/home/andrew/ntfs/movies/Kaijuu 8 Gou TV-2 [WEB-DL 1080p]/Kaijuu 8 Gou TV-2 - 04 [1080p CR WEB-DL AVC AAC].mkv\" --audio-file=\"/home/andrew/ntfs/movies/Kaijuu 8 Gou TV-2 [WEB-DL 1080p]/ENG Sound/Kaijuu 8 Gou TV-2 - 04 [1080p CR WEB-DL AVC AAC].CR.DUB.eng.mka\" --audio-file=\"/home/andrew/ntfs/movies/Kaijuu 8 Gou TV-2 [WEB-DL 1080p]/RUS Sound/AniLiberty/Kaijuu 8 Gou TV-2 - 04 [1080p CR WEB-DL AVC AAC].AL.mka\" --audio-file=\"/home/andrew/ntfs/movies/Kaijuu 8 Gou TV-2 [WEB-DL 1080p]/RUS Sound/StudioBand/Kaijuu 8 Gou TV-2 - 04 [1080p CR WEB-DL AVC AAC].SB.mka\" --sub-file=\"/home/andrew/ntfs/movies/Kaijuu 8 Gou TV-2 [WEB-DL 1080p]/ENG Subs/Kaijuu 8 Gou TV-2 - 04 [1080p CR WEB-DL AVC AAC].CR.full.eng.ass\" --sub-file=\"/home/andrew/ntfs/movies/Kaijuu 8 Gou TV-2 [WEB-DL 1080p]/ENG Subs/signs/Kaijuu 8 Gou TV-2 - 04 [1080p CR WEB-DL AVC AAC].CR.signs.eng.ass\" --sub-file=\"/home/andrew/ntfs/movies/Kaijuu 8 Gou TV-2 [WEB-DL 1080p]/RUS Subs/Crunchyroll/Kaijuu 8 Gou TV-2 - 04 [1080p CR WEB-DL AVC AAC].CR.полные.rus.ass\" --sub-file=\"/home/andrew/ntfs/movies/Kaijuu 8 Gou TV-2 [WEB-DL 1080p]/RUS Subs/Katsurasub/Kaijuu 8 Gou TV-2 - 04 [1080p CR WEB-DL AVC AAC].KS.полные.rus.ass\" --sub-file=\"/home/andrew/ntfs/movies/Kaijuu 8 Gou TV-2 [WEB-DL 1080p]/RUS Subs/надписи/Kaijuu 8 Gou TV-2 - 04 [1080p CR WEB-DL AVC AAC].CR.надписи.rus.ass\" --sub-fonts-dir=\"/home/andrew/ntfs/movies/Kaijuu 8 Gou TV-2 [WEB-DL 1080p]/Fonts\"",
+    "/home/andrew/ntfs/movies/Kaijuu 8 Gou TV-2 [WEB-DL 1080p]/05.bash": "mpv \"/home/andrew/ntfs/movies/Kaijuu 8 Gou TV-2 [WEB-DL 1080p]/Kaijuu 8 Gou TV-2 - 05 [1080p CR WEB-DL AVC AAC].mkv\" --audio-file=\"/home/andrew/ntfs/movies/Kaijuu 8 Gou TV-2 [WEB-DL 1080p]/ENG Sound/Kaijuu 8 Gou TV-2 - 05 [1080p CR WEB-DL AVC AAC].CR.DUB.eng.mka\" --audio-file=\"/home/andrew/ntfs/movies/Kaijuu 8 Gou TV-2 [WEB-DL 1080p]/RUS Sound/AniLiberty/Kaijuu 8 Gou TV-2 - 05 [1080p CR WEB-DL AVC AAC].AL.mka\" --audio-file=\"/home/andrew/ntfs/movies/Kaijuu 8 Gou TV-2 [WEB-DL 1080p]/RUS Sound/StudioBand/Kaijuu 8 Gou TV-2 - 05 [1080p CR WEB-DL AVC AAC].SB.mka\" --sub-file=\"/home/andrew/ntfs/movies/Kaijuu 8 Gou TV-2 [WEB-DL 1080p]/ENG Subs/Kaijuu 8 Gou TV-2 - 05 [1080p CR WEB-DL AVC AAC].CR.full.eng.ass\" --sub-file=\"/home/andrew/ntfs/movies/Kaijuu 8 Gou TV-2 [WEB-DL 1080p]/ENG Subs/signs/Kaijuu 8 Gou TV-2 - 05 [1080p CR WEB-DL AVC AAC].CR.signs.eng.ass\" --sub-file=\"/home/andrew/ntfs/movies/Kaijuu 8 Gou TV-2 [WEB-DL 1080p]/RUS Subs/Crunchyroll/Kaijuu 8 Gou TV-2 - 05 [1080p CR WEB-DL AVC AAC].CR.полные.rus.ass\" --sub-file=\"/home/andrew/ntfs/movies/Kaijuu 8 Gou TV-2 [WEB-DL 1080p]/RUS Subs/Katsurasub/Kaijuu 8 Gou TV-2 - 05 [1080p CR WEB-DL AVC AAC].KS.полные.rus.ass\" --sub-file=\"/home/andrew/ntfs/movies/Kaijuu 8 Gou TV-2 [WEB-DL 1080p]/RUS Subs/надписи/Kaijuu 8 Gou TV-2 - 05 [1080p CR WEB-DL AVC AAC].CR.надписи.rus.ass\" --sub-fonts-dir=\"/home/andrew/ntfs/movies/Kaijuu 8 Gou TV-2 [WEB-DL 1080p]/Fonts\"",
+    "/home/andrew/ntfs/movies/Kaijuu 8 Gou TV-2 [WEB-DL 1080p]/06.bash": "mpv \"/home/andrew/ntfs/movies/Kaijuu 8 Gou TV-2 [WEB-DL 1080p]/Kaijuu 8 Gou TV-2 - 06 [1080p CR WEB-DL AVC AAC].mkv\" --audio-file=\"/home/andrew/ntfs/movies/Kaijuu 8 Gou TV-2 [WEB-DL 1080p]/ENG Sound/Kaijuu 8 Gou TV-2 - 06 [1080p CR WEB-DL AVC AAC].CR.DUB.eng.mka\" --audio-file=\"/home/andrew/ntfs/movies/Kaijuu 8 Gou TV-2 [WEB-DL 1080p]/RUS Sound/AniLiberty/Kaijuu 8 Gou TV-2 - 06 [1080p CR WEB-DL AVC AAC].AL.mka\" --audio-file=\"/home/andrew/ntfs/movies/Kaijuu 8 Gou TV-2 [WEB-DL 1080p]/RUS Sound/StudioBand/Kaijuu 8 Gou TV-2 - 06 [1080p CR WEB-DL AVC AAC].SB.mka\" --sub-file=\"/home/andrew/ntfs/movies/Kaijuu 8 Gou TV-2 [WEB-DL 1080p]/ENG Subs/Kaijuu 8 Gou TV-2 - 06 [1080p CR WEB-DL AVC AAC].CR.full.eng.ass\" --sub-file=\"/home/andrew/ntfs/movies/Kaijuu 8 Gou TV-2 [WEB-DL 1080p]/ENG Subs/signs/Kaijuu 8 Gou TV-2 - 06 [1080p CR WEB-DL AVC AAC].CR.signs.eng.ass\" --sub-file=\"/home/andrew/ntfs/movies/Kaijuu 8 Gou TV-2 [WEB-DL 1080p]/RUS Subs/Crunchyroll/Kaijuu 8 Gou TV-2 - 06 [1080p CR WEB-DL AVC AAC].CR.полные.rus.ass\" --sub-file=\"/home/andrew/ntfs/movies/Kaijuu 8 Gou TV-2 [WEB-DL 1080p]/RUS Subs/Katsurasub/Kaijuu 8 Gou TV-2 - 06 [1080p CR WEB-DL AVC AAC].KS.полные.rus.ass\" --sub-file=\"/home/andrew/ntfs/movies/Kaijuu 8 Gou TV-2 [WEB-DL 1080p]/RUS Subs/надписи/Kaijuu 8 Gou TV-2 - 06 [1080p CR WEB-DL AVC AAC].CR.надписи.rus.ass\" --sub-fonts-dir=\"/home/andrew/ntfs/movies/Kaijuu 8 Gou TV-2 [WEB-DL 1080p]/Fonts\"",
+    "/home/andrew/ntfs/movies/Kaijuu 8 Gou TV-2 [WEB-DL 1080p]/07.bash": "mpv \"/home/andrew/ntfs/movies/Kaijuu 8 Gou TV-2 [WEB-DL 1080p]/Kaijuu 8 Gou TV-2 - 07 [1080p CR WEB-DL AVC AAC].mkv\" --audio-file=\"/home/andrew/ntfs/movies/Kaijuu 8 Gou TV-2 [WEB-DL 1080p]/ENG Sound/Kaijuu 8 Gou TV-2 - 07 [1080p CR WEB-DL AVC AAC].CR.DUB.eng.mka\" --audio-file=\"/home/andrew/ntfs/movies/Kaijuu 8 Gou TV-2 [WEB-DL 1080p]/RUS Sound/AniLiberty/Kaijuu 8 Gou TV-2 - 07 [1080p CR WEB-DL AVC AAC].AL.mka\" --audio-file=\"/home/andrew/ntfs/movies/Kaijuu 8 Gou TV-2 [WEB-DL 1080p]/RUS Sound/StudioBand/Kaijuu 8 Gou TV-2 - 07 [1080p CR WEB-DL AVC AAC].SB.mka\" --sub-file=\"/home/andrew/ntfs/movies/Kaijuu 8 Gou TV-2 [WEB-DL 1080p]/ENG Subs/Kaijuu 8 Gou TV-2 - 07 [1080p CR WEB-DL AVC AAC].CR.full.eng.ass\" --sub-file=\"/home/andrew/ntfs/movies/Kaijuu 8 Gou TV-2 [WEB-DL 1080p]/ENG Subs/signs/Kaijuu 8 Gou TV-2 - 07 [1080p CR WEB-DL AVC AAC].CR.signs.eng.ass\" --sub-file=\"/home/andrew/ntfs/movies/Kaijuu 8 Gou TV-2 [WEB-DL 1080p]/RUS Subs/Crunchyroll/Kaijuu 8 Gou TV-2 - 07 [1080p CR WEB-DL AVC AAC].CR.полные.rus.ass\" --sub-file=\"/home/andrew/ntfs/movies/Kaijuu 8 Gou TV-2 [WEB-DL 1080p]/RUS Subs/Katsurasub/Kaijuu 8 Gou TV-2 - 07 [1080p CR WEB-DL AVC AAC].KS.полные.rus.ass\" --sub-file=\"/home/andrew/ntfs/movies/Kaijuu 8 Gou TV-2 [WEB-DL 1080p]/RUS Subs/надписи/Kaijuu 8 Gou TV-2 - 07 [1080p CR WEB-DL AVC AAC].CR.надписи.rus.ass\" --sub-fonts-dir=\"/home/andrew/ntfs/movies/Kaijuu 8 Gou TV-2 [WEB-DL 1080p]/Fonts\"",
+    "/home/andrew/ntfs/movies/Kaijuu 8 Gou TV-2 [WEB-DL 1080p]/08.bash": "mpv \"/home/andrew/ntfs/movies/Kaijuu 8 Gou TV-2 [WEB-DL 1080p]/Kaijuu 8 Gou TV-2 - 08 [1080p CR WEB-DL AVC AAC].mkv\" --audio-file=\"/home/andrew/ntfs/movies/Kaijuu 8 Gou TV-2 [WEB-DL 1080p]/ENG Sound/Kaijuu 8 Gou TV-2 - 08 [1080p CR WEB-DL AVC AAC].CR.DUB.eng.mka\" --audio-file=\"/home/andrew/ntfs/movies/Kaijuu 8 Gou TV-2 [WEB-DL 1080p]/RUS Sound/AniLiberty/Kaijuu 8 Gou TV-2 - 08 [1080p CR WEB-DL AVC AAC].AL.mka\" --audio-file=\"/home/andrew/ntfs/movies/Kaijuu 8 Gou TV-2 [WEB-DL 1080p]/RUS Sound/StudioBand/Kaijuu 8 Gou TV-2 - 08 [1080p CR WEB-DL AVC AAC].SB.mka\" --sub-file=\"/home/andrew/ntfs/movies/Kaijuu 8 Gou TV-2 [WEB-DL 1080p]/ENG Subs/Kaijuu 8 Gou TV-2 - 08 [1080p CR WEB-DL AVC AAC].CR.full.eng.ass\" --sub-file=\"/home/andrew/ntfs/movies/Kaijuu 8 Gou TV-2 [WEB-DL 1080p]/ENG Subs/signs/Kaijuu 8 Gou TV-2 - 08 [1080p CR WEB-DL AVC AAC].CR.signs.eng.ass\" --sub-file=\"/home/andrew/ntfs/movies/Kaijuu 8 Gou TV-2 [WEB-DL 1080p]/RUS Subs/Crunchyroll/Kaijuu 8 Gou TV-2 - 08 [1080p CR WEB-DL AVC AAC].CR.полные.rus.ass\" --sub-file=\"/home/andrew/ntfs/movies/Kaijuu 8 Gou TV-2 [WEB-DL 1080p]/RUS Subs/Katsurasub/Kaijuu 8 Gou TV-2 - 08 [1080p CR WEB-DL AVC AAC].KS.полные.rus.ass\" --sub-file=\"/home/andrew/ntfs/movies/Kaijuu 8 Gou TV-2 [WEB-DL 1080p]/RUS Subs/надписи/Kaijuu 8 Gou TV-2 - 08 [1080p CR WEB-DL AVC AAC].CR.надписи.rus.ass\" --sub-fonts-dir=\"/home/andrew/ntfs/movies/Kaijuu 8 Gou TV-2 [WEB-DL 1080p]/Fonts\"",
+    "/home/andrew/ntfs/movies/Kaijuu 8 Gou TV-2 [WEB-DL 1080p]/09.bash": "mpv \"/home/andrew/ntfs/movies/Kaijuu 8 Gou TV-2 [WEB-DL 1080p]/Kaijuu 8 Gou TV-2 - 09 [1080p CR WEB-DL AVC AAC].mkv\" --audio-file=\"/home/andrew/ntfs/movies/Kaijuu 8 Gou TV-2 [WEB-DL 1080p]/ENG Sound/Kaijuu 8 Gou TV-2 - 09 [1080p CR WEB-DL AVC AAC].CR.DUB.eng.mka\" --audio-file=\"/home/andrew/ntfs/movies/Kaijuu 8 Gou TV-2 [WEB-DL 1080p]/RUS Sound/AniLiberty/Kaijuu 8 Gou TV-2 - 09 [1080p CR WEB-DL AVC AAC].AL.mka\" --audio-file=\"/home/andrew/ntfs/movies/Kaijuu 8 Gou TV-2 [WEB-DL 1080p]/RUS Sound/StudioBand/Kaijuu 8 Gou TV-2 - 09 [1080p CR WEB-DL AVC AAC].SB.mka\" --sub-file=\"/home/andrew/ntfs/movies/Kaijuu 8 Gou TV-2 [WEB-DL 1080p]/ENG Subs/Kaijuu 8 Gou TV-2 - 09 [1080p CR WEB-DL AVC AAC].CR.full.eng.ass\" --sub-file=\"/home/andrew/ntfs/movies/Kaijuu 8 Gou TV-2 [WEB-DL 1080p]/ENG Subs/signs/Kaijuu 8 Gou TV-2 - 09 [1080p CR WEB-DL AVC AAC].CR.signs.eng.ass\" --sub-file=\"/home/andrew/ntfs/movies/Kaijuu 8 Gou TV-2 [WEB-DL 1080p]/RUS Subs/Crunchyroll/Kaijuu 8 Gou TV-2 - 09 [1080p CR WEB-DL AVC AAC].CR.полные.rus.ass\" --sub-file=\"/home/andrew/ntfs/movies/Kaijuu 8 Gou TV-2 [WEB-DL 1080p]/RUS Subs/Katsurasub/Kaijuu 8 Gou TV-2 - 09 [1080p CR WEB-DL AVC AAC].KS.полные.rus.ass\" --sub-file=\"/home/andrew/ntfs/movies/Kaijuu 8 Gou TV-2 [WEB-DL 1080p]/RUS Subs/надписи/Kaijuu 8 Gou TV-2 - 09 [1080p CR WEB-DL AVC AAC].CR.надписи.rus.ass\" --sub-fonts-dir=\"/home/andrew/ntfs/movies/Kaijuu 8 Gou TV-2 [WEB-DL 1080p]/Fonts\"",
+    "/home/andrew/ntfs/movies/Kaijuu 8 Gou TV-2 [WEB-DL 1080p]/10.bash": "mpv \"/home/andrew/ntfs/movies/Kaijuu 8 Gou TV-2 [WEB-DL 1080p]/Kaijuu 8 Gou TV-2 - 10 [1080p CR WEB-DL AVC AAC].mkv\" --audio-file=\"/home/andrew/ntfs/movies/Kaijuu 8 Gou TV-2 [WEB-DL 1080p]/ENG Sound/Kaijuu 8 Gou TV-2 - 10 [1080p CR WEB-DL AVC AAC].CR.DUB.eng.mka\" --audio-file=\"/home/andrew/ntfs/movies/Kaijuu 8 Gou TV-2 [WEB-DL 1080p]/RUS Sound/AniLiberty/Kaijuu 8 Gou TV-2 - 10 [1080p CR WEB-DL AVC AAC].AL.mka\" --audio-file=\"/home/andrew/ntfs/movies/Kaijuu 8 Gou TV-2 [WEB-DL 1080p]/RUS Sound/StudioBand/Kaijuu 8 Gou TV-2 - 10 [1080p CR WEB-DL AVC AAC].SB.mka\" --sub-file=\"/home/andrew/ntfs/movies/Kaijuu 8 Gou TV-2 [WEB-DL 1080p]/ENG Subs/Kaijuu 8 Gou TV-2 - 10 [1080p CR WEB-DL AVC AAC].CR.full.eng.ass\" --sub-file=\"/home/andrew/ntfs/movies/Kaijuu 8 Gou TV-2 [WEB-DL 1080p]/ENG Subs/signs/Kaijuu 8 Gou TV-2 - 10 [1080p CR WEB-DL AVC AAC].CR.signs.eng.ass\" --sub-file=\"/home/andrew/ntfs/movies/Kaijuu 8 Gou TV-2 [WEB-DL 1080p]/RUS Subs/Crunchyroll/Kaijuu 8 Gou TV-2 - 10 [1080p CR WEB-DL AVC AAC].CR.полные.rus.ass\" --sub-file=\"/home/andrew/ntfs/movies/Kaijuu 8 Gou TV-2 [WEB-DL 1080p]/RUS Subs/Katsurasub/Kaijuu 8 Gou TV-2 - 10 [1080p CR WEB-DL AVC AAC].KS.полные.rus.ass\" --sub-file=\"/home/andrew/ntfs/movies/Kaijuu 8 Gou TV-2 [WEB-DL 1080p]/RUS Subs/надписи/Kaijuu 8 Gou TV-2 - 10 [1080p CR WEB-DL AVC AAC].CR.надписи.rus.ass\" --sub-fonts-dir=\"/home/andrew/ntfs/movies/Kaijuu 8 Gou TV-2 [WEB-DL 1080p]/Fonts\"",
+    "/home/andrew/ntfs/movies/Kaijuu 8 Gou TV-2 [WEB-DL 1080p]/11.bash": "mpv \"/home/andrew/ntfs/movies/Kaijuu 8 Gou TV-2 [WEB-DL 1080p]/Kaijuu 8 Gou TV-2 - 11 [1080p CR WEB-DL AVC AAC].mkv\" --audio-file=\"/home/andrew/ntfs/movies/Kaijuu 8 Gou TV-2 [WEB-DL 1080p]/ENG Sound/Kaijuu 8 Gou TV-2 - 11 [1080p CR WEB-DL AVC AAC].CR.DUB.eng.mka\" --audio-file=\"/home/andrew/ntfs/movies/Kaijuu 8 Gou TV-2 [WEB-DL 1080p]/RUS Sound/AniLiberty/Kaijuu 8 Gou TV-2 - 11 [1080p CR WEB-DL AVC AAC].AL.mka\" --audio-file=\"/home/andrew/ntfs/movies/Kaijuu 8 Gou TV-2 [WEB-DL 1080p]/RUS Sound/StudioBand/Kaijuu 8 Gou TV-2 - 11 [1080p CR WEB-DL AVC AAC].SB.mka\" --sub-file=\"/home/andrew/ntfs/movies/Kaijuu 8 Gou TV-2 [WEB-DL 1080p]/ENG Subs/Kaijuu 8 Gou TV-2 - 11 [1080p CR WEB-DL AVC AAC].CR.full.eng.ass\" --sub-file=\"/home/andrew/ntfs/movies/Kaijuu 8 Gou TV-2 [WEB-DL 1080p]/ENG Subs/signs/Kaijuu 8 Gou TV-2 - 11 [1080p CR WEB-DL AVC AAC].CR.signs.eng.ass\" --sub-file=\"/home/andrew/ntfs/movies/Kaijuu 8 Gou TV-2 [WEB-DL 1080p]/RUS Subs/Crunchyroll/Kaijuu 8 Gou TV-2 - 11 [1080p CR WEB-DL AVC AAC].CR.полные.rus.ass\" --sub-file=\"/home/andrew/ntfs/movies/Kaijuu 8 Gou TV-2 [WEB-DL 1080p]/RUS Subs/Katsurasub/Kaijuu 8 Gou TV-2 - 11 [1080p CR WEB-DL AVC AAC].KS.полные.rus.ass\" --sub-file=\"/home/andrew/ntfs/movies/Kaijuu 8 Gou TV-2 [WEB-DL 1080p]/RUS Subs/надписи/Kaijuu 8 Gou TV-2 - 11 [1080p CR WEB-DL AVC AAC].CR.надписи.rus.ass\" --sub-fonts-dir=\"/home/andrew/ntfs/movies/Kaijuu 8 Gou TV-2 [WEB-DL 1080p]/Fonts\""
+  }
+}
