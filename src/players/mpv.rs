@@ -7,7 +7,15 @@ pub struct MpvPlayer {
 
 impl Player for MpvPlayer {
     fn program_name(&self) -> &'static str {
-        if cfg!(windows) { "mpv.exe" } else { "mpv" }
+        #[cfg(windows)]
+        {
+            return "mpv.exe";
+        }
+
+        #[cfg(not(windows))]
+        {
+            return "mpv";
+        }
     }
 
     fn append_audio_args(&self, cmd: &mut String, audio: &[PathBuf]) {

@@ -7,7 +7,15 @@ pub struct VlcPlayer {
 
 impl Player for VlcPlayer {
     fn program_name(&self) -> &'static str {
-        if cfg!(windows) { "vlc.exe" } else { "vlc" }
+        #[cfg(windows)]
+        {
+            return "vlc.exe";
+        }
+
+        #[cfg(not(windows))]
+        {
+            return "vlc";
+        }
     }
 
     fn append_audio_args(&self, cmd: &mut String, audio: &[PathBuf]) {
