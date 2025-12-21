@@ -43,6 +43,16 @@ From the repository root:
 cargo run -- <root_dir>
 ```
 
+Select a player (defaults to `mpv`):
+
+```bash
+cargo run -- <root_dir> --player mpv
+```
+
+```bash
+cargo run -- <root_dir> --player vlc
+```
+
 Example:
 
 ```bash
@@ -73,10 +83,22 @@ Linux/macOS:
 ./media-launcher /path/to/episode-folder
 ```
 
+With VLC:
+
+```bash
+./media-launcher /path/to/episode-folder --player vlc
+```
+
 Windows (PowerShell):
 
 ```powershell
 .\media-launcher.exe C:\Path\To\EpisodeFolder
+```
+
+With VLC:
+
+```powershell
+.\media-launcher.exe C:\Path\To\EpisodeFolder --player vlc
 ```
 
 After running, you’ll find generated `NN.bash` / `NN.cmd` scripts in that folder; run the script for the episode you want to watch.

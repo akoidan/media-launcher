@@ -9,11 +9,17 @@ use anyhow::{anyhow, Context, Result};
 use clap::Parser;
 use regex::Regex;
 
+mod players;
+
 #[derive(Parser, Debug)]
 #[command(author, version, about)]
 struct Args {
     /// Root directory to scan (episode folder)
+    #[arg(value_parser = validate_root_dir)]
     root_dir: PathBuf,
+
+    #[arg(long, value_enum, default_value_t = players::PlayerKind::Mpv)]
+    player: players::PlayerKind,
 }
 
 #[derive(Debug, Default)]
@@ -21,6 +27,17 @@ struct EpisodeFiles {
     audio: Vec<PathBuf>,
     subtitles: Vec<PathBuf>,
     video: Option<PathBuf>,
+}
+
+fn validate_root_dir(s: &str) -> std::result::Result<PathBuf, String> {
+    let p = PathBuf::from(s);
+    if !p.exists() {
+        return Err(format!("Path does not exist: {s}"));
+    }
+    if !p.is_dir() {
+        return Err(format!("Not a directory: {s}"));
+    }
+    Ok(p)
 }
 
 fn is_script_file(path: &Path) -> bool {
@@ -128,28 +145,6 @@ fn read_dir_recursive(
     Ok(())
 }
 
-fn build_launch_command(
-    program_name: &str,
-    value: &EpisodeFiles,
-    font_dir: &Option<PathBuf>,
-) -> Option<String> {
-    let video = value.video.as_ref()?;
-
-    let mut cmd = format!("{} \"{}\"", program_name, video.display());
-
-    for audio in &value.audio {
-        cmd.push_str(&format!(" --audio-file=\"{}\"", audio.display()));
-    }
-    for sub in &value.subtitles {
-        cmd.push_str(&format!(" --sub-file=\"{}\"", sub.display()));
-    }
-    if let Some(font_dir) = font_dir {
-        cmd.push_str(&format!(" --sub-fonts-dir=\"{}\"", font_dir.display()));
-    }
-
-    Some(cmd)
-}
-
 fn main() -> Result<()> {
     let args = Args::parse();
 
@@ -157,7 +152,8 @@ fn main() -> Result<()> {
         .with_context(|| format!("Failed to resolve {}", args.root_dir.display()))?;
 
     let script_ext = if cfg!(windows) { "cmd" } else { "bash" };
-    let program_name = if cfg!(windows) { "mvp.exe" } else { "mpv" };
+
+    let player = players::create_player(args.player);
 
     let re_e = Regex::new(r"E(\d\d)")?;
     let re_2d = Regex::new(r"\d\d")?;
@@ -168,7 +164,7 @@ fn main() -> Result<()> {
     read_dir_recursive(&root_dir, &mut structure, &mut font_dir, &re_e, &re_2d)?;
 
     for (episode, value) in structure {
-        let Some(open_cmd) = build_launch_command(program_name, &value, &font_dir) else {
+        let Some(open_cmd) = player.build_launch_command(&value, &font_dir) else {
             continue;
         };
 
