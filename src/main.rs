@@ -35,9 +35,12 @@ fn main() -> Result<()> {
     let (structure, font_dir) = media_scan::scan_dir(&root_dir)?;
 
     for (episode, value) in structure {
-        let Some(open_cmd) = player.build_launch_command(&value, &font_dir) else {
-            eprintln!("Skipping episode {episode}: cannot build launch command");
-            continue;
+        let open_cmd = match player.build_launch_command(&value, &font_dir) {
+            Ok(cmd) => cmd,
+            Err(e) => {
+                eprintln!("Skipping episode {episode}: {e}");
+                continue;
+            }
         };
 
         let script_path = root_dir.join(format!("{:02}.{}", episode, os::script_ext()));

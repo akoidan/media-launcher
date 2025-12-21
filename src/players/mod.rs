@@ -75,13 +75,16 @@ pub trait Player {
         &self,
         value: &EpisodeFiles,
         font_dir: &Option<PathBuf>,
-    ) -> Option<String> {
-        let video = value.video.as_ref()?;
+    ) -> Result<String> {
+        let video = value
+            .video
+            .as_ref()
+            .ok_or_else(|| anyhow!("Main video file not found"))?;
         let mut cmd = format!("{} \"{}\"", self.program_name(), video.display());
         self.append_audio_args(&mut cmd, &value.audio);
         self.append_subtitle_args(&mut cmd, &value.subtitles);
         self.append_font_args(&mut cmd, font_dir);
-        Some(cmd)
+        Ok(cmd)
     }
 
     fn append_audio_args(&self, cmd: &mut String, audio: &[PathBuf]);
