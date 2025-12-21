@@ -26,7 +26,11 @@ pub fn create_player(kind: PlayerKind) -> Box<dyn Player> {
 pub trait Player {
     fn program_name(&self) -> &'static str;
 
-    fn build_launch_command(&self, value: &EpisodeFiles, font_dir: &Option<PathBuf>) -> Option<String> {
+    fn build_launch_command(
+        &self,
+        value: &EpisodeFiles,
+        font_dir: &Option<PathBuf>,
+    ) -> Option<String> {
         let video = value.video.as_ref()?;
         let mut cmd = format!("{} \"{}\"", self.program_name(), video.display());
         self.append_audio_args(&mut cmd, &value.audio);

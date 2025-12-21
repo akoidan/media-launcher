@@ -59,14 +59,15 @@ fn is_script_file(path: &Path) -> bool {
 
 fn is_supported_file(path: &Path) -> bool {
     let ext = path.extension().and_then(OsStr::to_str).unwrap_or("");
-    matches!(ext.to_ascii_lowercase().as_str(), "mkv" | "ass" | "mka" | "ttf")
+    matches!(
+        ext.to_ascii_lowercase().as_str(),
+        "mkv" | "ass" | "mka" | "ttf"
+    )
 }
 
 fn extract_episode_number(file_name: &str) -> Option<u32> {
     if let Some(caps) = re_e().captures(file_name) {
-        return caps
-            .get(1)
-            .and_then(|m| m.as_str().parse::<u32>().ok());
+        return caps.get(1).and_then(|m| m.as_str().parse::<u32>().ok());
     }
 
     re_2d()
@@ -74,10 +75,7 @@ fn extract_episode_number(file_name: &str) -> Option<u32> {
         .and_then(|m| m.as_str().parse::<u32>().ok())
 }
 
-fn handle_media_file(
-    path: PathBuf,
-    structure: &mut BTreeMap<u32, EpisodeFiles>,
-) -> Result<()> {
+fn handle_media_file(path: PathBuf, structure: &mut BTreeMap<u32, EpisodeFiles>) -> Result<()> {
     if is_script_file(&path) {
         return Ok(());
     }

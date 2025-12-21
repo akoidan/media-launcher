@@ -2,8 +2,7 @@ use std::path::PathBuf;
 
 use super::Player;
 
-pub struct MpvPlayer {
-}
+pub struct MpvPlayer {}
 
 impl Player for MpvPlayer {
     fn program_name(&self) -> &'static str {
