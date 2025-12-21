@@ -1,0 +1,112 @@
+name: build
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+    inputs:
+      release_name:
+        description: 'Release Name'
+        required: true
+
+jobs:
+  create_release:
+    runs-on: ubuntu-24.04
+
+    permissions: write-all
+    outputs:
+      upload_url: ${{ steps.create_release.outputs.upload_url }}
+    steps:
+      - name: Set Short SHA
+        run: echo "SHORT_SHA=${GITHUB_SHA::7}" >> $GITHUB_ENV
+
+      - name: Set Release Name from Input
+        if: github.event_name == 'workflow_dispatch'
+        run: echo "RELEASE_NAME=${{ github.event.inputs.release_name }}" >> $GITHUB_ENV
+
+      - name: Set Release Name for Push Trigger
+        if: github.event_name == 'push'
+        run: echo "RELEASE_NAME=${{ env.SHORT_SHA }}" >> $GITHUB_ENV
+      - name: Create GitHub Release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ env.RELEASE_NAME }}
+          release_name: ${{ env.RELEASE_NAME }}
+          draft: false
+          prerelease: false
+
+  linux:
+    runs-on: ubuntu-24.04
+    needs: [ create_release ]
+    permissions: write-all
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: dtolnay/rust-toolchain@stable
+
+      - uses: actions/cache@v4
+        id: cache-cargo
+        with:
+          path: |
+            ~/.cargo/registry
+            ~/.cargo/git
+            target
+          key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
+
+      - name: Cargo fetch
+        if: steps.cache-cargo.outputs.cache-hit != 'true'
+        run: cargo fetch
+
+      - name: Build (release)
+        run: cargo build --release
+
+      - name: Upload Release Asset
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ needs.create_release.outputs.upload_url }}
+          asset_path: ./target/release/media-launcher
+          asset_name: media-launcher.elf
+          asset_content_type: application/x-executable
+
+      - name: Tests
+        run: cargo test --all-features
+
+  win32:
+    needs: [ create_release ]
+    runs-on: windows-2022
+    permissions: write-all
+    steps:
+      - uses: actions/checkout@v3
+
+      - uses: dtolnay/rust-toolchain@stable
+
+      - uses: actions/cache@v4
+        id: cache-cargo
+        with:
+          path: |
+            ${{ env.USERPROFILE }}\\.cargo\\registry
+            ${{ env.USERPROFILE }}\\.cargo\\git
+            target
+          key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
+
+      - name: Cargo fetch
+        if: steps.cache-cargo.outputs.cache-hit != 'true'
+        run: cargo fetch
+
+      - name: Build (release)
+        run: cargo build --release
+
+      - name: Upload Release Asset
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ needs.create_release.outputs.upload_url }}
+          asset_path: ./target/release/media-launcher.exe
+          asset_name: media-launcher.exe
+          asset_content_type: application/vnd.microsoft.portable-executable
