@@ -12,20 +12,29 @@ Each script launches the episode in **mpv** or **vlc** players (and adds extra a
 
 ## Usage
 
-Download the file
+ - Download executable application file from [releases](https://github.com/akoidan/media-launcher/releases)
+ - Run it either by opening it, either passing folder with TV series path as first argument
+ - It will generate launch scripts in the video folder
+
+For archlinux you can also install it via `yay -S media-launcher` or `paru -S media-launcher`
 
 ## Tests
 
 ```sh
-cargo test --test dump_fixture -- "D:\movies\[BD-Remux] Ore dake Level Up na Ken"
+cargo test --test mock_fs_tests
 ```
 
-Will create `tests\fixtures\[BD-Remux] Ore dake Level Up na Ken.json`
 
+### Generate test fixtures
 
 ```sh
-cargo test --test mock_fs_tests -- "D:\movies\[BD-Remux] Ore dake Level Up na Ken"
+cargo run -p xtask -- dump-fixture "D:\movies\Kimetsu.no.Yaiba.Katanakaji.no.Sato.hen.WEB-DL.1080p"
 ```
+
+Will create `tests\fixtures\Kimetsu.no.Yaiba.Katanakaji.no.Sato.hen.WEB-DL.1080p`
+
+
+## Lint
 
 If you want formatting/linting locally:
 
