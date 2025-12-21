@@ -24,7 +24,7 @@ pub fn create_player(kind: PlayerKind) -> Box<dyn Player> {
 }
 
 pub trait Player {
-    fn program_name(&self) -> &'static str;
+    fn program_name(&self) -> String;
 
     fn build_launch_command(
         &self,

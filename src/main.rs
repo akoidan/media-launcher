@@ -12,6 +12,7 @@ use anyhow::{anyhow, Context, Result};
 use clap::Parser;
 use regex::Regex;
 
+mod os;
 mod players;
 
 static RE_E: OnceLock<Regex> = OnceLock::new();
@@ -30,7 +31,7 @@ fn re_2d() -> &'static Regex {
 struct Args {
     /// Root directory to scan (episode folder)
     #[arg(value_parser = validate_root_dir)]
-    root_dir: PathBuf,
+    root_dir: Option<PathBuf>,
 
     #[arg(long, value_enum, default_value_t = players::PlayerKind::Mpv)]
     player: players::PlayerKind,
@@ -45,7 +46,7 @@ struct EpisodeFiles {
 
 fn pick_directory() -> Result<PathBuf> {
     let path = FileDialog::new()
-        .set_directory("C:\\")
+        .set_directory(os::default_pick_dir())
         .pick_folder()
         .ok_or_else(|| anyhow!("No directory selected"))?;
     
@@ -169,20 +170,13 @@ fn read_dir_recursive(
 fn main() -> Result<()> {
     let args = Args::parse();
 
-    let root_dir = fs::canonicalize(&args.root_dir)
-        .with_context(|| format!("Failed to resolve {}", args.root_dir.display()))?;
-
-    let script_ext = {
-        #[cfg(windows)]
-        {
-            "cmd"
-        }
-
-        #[cfg(not(windows))]
-        {
-            "bash"
-        }
+    let selected_root_dir = match args.root_dir {
+        Some(p) => p,
+        None => pick_directory()?,
     };
+
+    let root_dir = fs::canonicalize(&selected_root_dir)
+        .with_context(|| format!("Failed to resolve {}", selected_root_dir.display()))?;
 
     let player = players::create_player(args.player);
 
@@ -196,15 +190,12 @@ fn main() -> Result<()> {
             continue;
         };
 
-        let script_path = root_dir.join(format!("{:02}.{}", episode, script_ext));
+        let script_path = root_dir.join(format!("{:02}.{}", episode, os::script_ext()));
         fs::write(&script_path, open_cmd)?;
 
-        #[cfg(unix)]
-        {
-            use std::os::unix::fs::PermissionsExt;
-            let perm = fs::Permissions::from_mode(0o755);
-            fs::set_permissions(&script_path, perm)?;
-        }
+        os::set_script_permissions(&script_path)?;
+
+        println!("{}", script_path.display());
     }
 
     Ok(())
