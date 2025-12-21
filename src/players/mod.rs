@@ -70,7 +70,6 @@ pub fn resolve_player(requested: Option<PlayerKind>) -> Result<Box<dyn Player>> 
     })
 }
 
-
 pub trait Player {
     fn program_name(&self) -> String;
 
