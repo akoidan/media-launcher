@@ -14,6 +14,7 @@ pub use windows::*;
 #[cfg(not(windows))]
 pub use linux::*;
 
+#[allow(dead_code)]
 pub fn is_program_in_path(base: &str) -> bool {
     is_program_in_path_with(&RealFs, base)
 }

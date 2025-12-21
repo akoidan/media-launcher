@@ -121,6 +121,7 @@ fn handle_media_file(path: PathBuf, structure: &mut BTreeMap<u32, EpisodeFiles>)
     Ok(())
 }
 
+#[allow(dead_code)]
 pub fn scan_dir(dir_path: &Path) -> Result<(BTreeMap<u32, EpisodeFiles>, Option<PathBuf>)> {
     scan_dir_with(&RealFs, dir_path)
 }
@@ -142,6 +143,7 @@ pub fn scan_dir_with(
     Ok((structure, font_dir))
 }
 
+#[allow(dead_code)]
 pub fn write_episode_script(root_dir: &Path, episode: u32, open_cmd: &str) -> Result<()> {
     write_episode_script_with(&RealFs, root_dir, episode, open_cmd)
 }

@@ -8,6 +8,7 @@ pub trait Fs {
     fn is_file(&self, path: &Path) -> bool;
     fn write(&self, path: &Path, contents: &[u8]) -> Result<()>;
     fn canonicalize(&self, path: &Path) -> Result<PathBuf>;
+    #[allow(dead_code)]
     fn set_executable(&self, path: &Path) -> Result<()>;
 }
 

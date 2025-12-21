@@ -36,11 +36,15 @@ impl PlayerKind {
     }
 }
 
+#[allow(dead_code)]
 pub fn resolve_player(requested: Option<PlayerKind>) -> Result<Box<dyn Player>> {
     resolve_player_with(&crate::fs_access::RealFs, requested)
 }
 
-pub fn resolve_player_with(fs_access: &impl Fs, requested: Option<PlayerKind>) -> Result<Box<dyn Player>> {
+pub fn resolve_player_with(
+    fs_access: &impl Fs,
+    requested: Option<PlayerKind>,
+) -> Result<Box<dyn Player>> {
     let kind = match requested {
         Some(kind) => {
             if !kind.is_available_with(fs_access) {

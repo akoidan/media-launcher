@@ -16,6 +16,7 @@ pub fn decorate_program_name(base: &str) -> String {
     format!("{base}.exe")
 }
 
+#[allow(dead_code)]
 pub fn set_script_permissions(_path: &Path) -> Result<()> {
     set_script_permissions_with(&crate::fs_access::RealFs, _path)
 }

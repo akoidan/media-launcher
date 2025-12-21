@@ -11,6 +11,7 @@ mod media_scan;
 mod players;
 
 #[path = "../src/app.rs"]
+#[allow(dead_code)]
 mod app;
 
 use serde::Deserialize;
@@ -119,8 +120,10 @@ struct FixtureInput {
     binaries: Vec<String>,
     files: Value,
     #[serde(default)]
+    #[allow(dead_code)]
     expected_windows_writes: std::collections::BTreeMap<String, String>,
     #[serde(default)]
+    #[allow(dead_code)]
     expected_unix_writes: std::collections::BTreeMap<String, String>,
 }
 
@@ -145,10 +148,8 @@ fn populate_tree(fs: &mut MockFs, base: &Path, node: &Value) {
 fn golden_fixture_solo_leveling() {
     let _guard = env_lock().lock().unwrap();
 
-    let input: FixtureInput = serde_json::from_str(include_str!(
-        "fixtures/Solo Leveling TV-2.json"
-    ))
-    .unwrap();
+    let input: FixtureInput =
+        serde_json::from_str(include_str!("fixtures/Solo Leveling TV-2.json")).unwrap();
 
     #[cfg(windows)]
     let expected = &input.expected_windows_writes;
@@ -173,7 +174,11 @@ fn golden_fixture_solo_leveling() {
     }
 
     let old_path = env::var_os("PATH");
-    let path_dirs = input.path_dirs.iter().map(PathBuf::from).collect::<Vec<_>>();
+    let path_dirs = input
+        .path_dirs
+        .iter()
+        .map(PathBuf::from)
+        .collect::<Vec<_>>();
     env::set_var("PATH", set_test_path(&path_dirs));
 
     let player = match input.player.as_str() {

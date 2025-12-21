@@ -38,7 +38,9 @@ fn insert_path_with_value(tree: &mut Map<String, Value>, parts: &[String], value
     let head = parts[0].clone();
     let tail = &parts[1..];
 
-    let entry = tree.entry(head).or_insert_with(|| Value::Object(Map::new()));
+    let entry = tree
+        .entry(head)
+        .or_insert_with(|| Value::Object(Map::new()));
 
     match entry {
         Value::Object(map) => insert_path_with_value(map, tail, value),
@@ -58,15 +60,20 @@ fn insert_path_with_value(tree: &mut Map<String, Value>, parts: &[String], value
 }
 
 fn rel_parts(root: &Path, full: &Path) -> Result<Vec<String>> {
-    let rel = full
-        .strip_prefix(root)
-        .with_context(|| format!("Failed to strip prefix {} from {}", root.display(), full.display()))?;
+    let rel = full.strip_prefix(root).with_context(|| {
+        format!(
+            "Failed to strip prefix {} from {}",
+            root.display(),
+            full.display()
+        )
+    })?;
 
     let mut parts = Vec::new();
     for p in rel.components() {
-        let s = p.as_os_str().to_str().ok_or_else(|| {
-            anyhow::anyhow!("Non-UTF8 path component in {}", full.display())
-        })?;
+        let s = p
+            .as_os_str()
+            .to_str()
+            .ok_or_else(|| anyhow::anyhow!("Non-UTF8 path component in {}", full.display()))?;
         if !s.is_empty() {
             parts.push(s.to_string());
         }
@@ -90,7 +97,12 @@ fn normalize_root_string(path: &Path) -> String {
     s
 }
 
-fn expected_key_abs(root: &Path, full: &Path, sep: char, normalize_root_seps: bool) -> Result<String> {
+fn expected_key_abs(
+    root: &Path,
+    full: &Path,
+    sep: char,
+    normalize_root_seps: bool,
+) -> Result<String> {
     let parts = rel_parts(root, full)?;
 
     let mut root_s = normalize_root_string(root);
@@ -181,7 +193,9 @@ fn dump_fixture(input_dir: PathBuf) -> Result<()> {
             .file_name()
             .and_then(|s| s.to_str())
             .filter(|s| !s.is_empty())
-            .ok_or_else(|| anyhow::anyhow!("Could not determine directory name from {}", root.display()))?;
+            .ok_or_else(|| {
+                anyhow::anyhow!("Could not determine directory name from {}", root.display())
+            })?;
         let mut p = PathBuf::from(env!("CARGO_MANIFEST_DIR"));
         p.pop();
         p.push("tests");
@@ -196,7 +210,8 @@ fn dump_fixture(input_dir: PathBuf) -> Result<()> {
     }
 
     let json = serde_json::to_string_pretty(&fixture)?;
-    fs::write(&out_path, json).with_context(|| format!("Failed to write {}", out_path.display()))?;
+    fs::write(&out_path, json)
+        .with_context(|| format!("Failed to write {}", out_path.display()))?;
     println!("{}", out_path.display());
 
     Ok(())
