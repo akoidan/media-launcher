@@ -1,25 +1,37 @@
 # Maintainer: Andrew Koidan <deathangel908@gmail.com>
 pkgname=media-launcher
-pkgbase=media-launcher
-pkgver=cb31997
+pkgver=0
 pkgrel=1
 releaser=akoidan
 pkgdesc="Cross-platform tool that generates executable scripts to launch video files with external audio tracks and subtitles. Automatically resolves sidecar media and opens the video in the player of your choice. Designed for fast, repeatable multi-track playback."
-url="https://github.com/${releaser}/media-launcher"
-license=("MIT")
+url="https://github.com/${releaser}/${pkgname}"
+license=('MIT')
 arch=('x86_64')
+
+makedepends=('git' 'rust')
+
 optdepends=(
     'mpv: Play generated scripts with mpv (default player)'
     'vlc: Play generated scripts with VLC'
 )
 
 source=(
-    "${pkgname}::https://github.com/${releaser}/${pkgname}/releases/download/${pkgver}/media-launcher.elf"
+    "${pkgname}::git+https://github.com/${releaser}/${pkgname}.git#branch=main"
 )
 
-sha256sums=('8be4e9d60dad3a42c06ffe60e5601a51fa9f20c16760a81def785faa2ee247da')
+sha256sums=('SKIP')
 
+pkgver() {
+  cd "${srcdir}/${pkgname}"
+  git describe --tags --always | sed 's/^v//; s/-/./g'
+}
+
+build() {
+  cd "${srcdir}/${pkgname}"
+  cargo build --release --locked
+}
 
 package() {
-  install -D -m755 "${srcdir}/media-launcher" "${pkgdir}/usr/bin/media-launcher"
+  cd "${srcdir}/${pkgname}"
+  install -D -m755 "target/release/${pkgname}" "${pkgdir}/usr/bin/${pkgname}"
 }
