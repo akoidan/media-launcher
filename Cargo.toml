@@ -2,8 +2,28 @@
 name = "media-launcher"
 version = "0.1.0"
 edition = "2021"
+build = "build.rs"
+
+[workspace]
+members = ["xtask"]
 
 [dependencies]
 anyhow = "1"
 clap = { version = "4", features = ["derive"] }
 regex = "1"
+rfd = "0.14.1"
+
+[dev-dependencies]
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+pretty_assertions = "1"
+
+[[test]]
+name = "e2e"
+path = "tests/e2e_tests.rs"
+
+[lints.rust]
+unsafe_code = "forbid"
+
+[lints.clippy]
+all = "warn"

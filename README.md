@@ -1,118 +1,49 @@
 # media-launcher
 
-`media-launcher` scans a directory containing episode media files and generates one launch script per episode.
+`media-launcher` scans a TV season folder and generates `NN.cmd`/`NN.bash` launch scripts to play each episode (including matching audio/subtitle tracks).
 
 For each episode it finds, it creates:
 
 - On Linux/macOS: `01.bash`, `02.bash`, ...
 - On Windows: `01.cmd`, `02.cmd`, ...
 
-Each script launches the episode in **mpv** (and adds extra audio/subtitle tracks when present).
+Each script launches the episode in **mpv** or **vlc** players (and adds extra audio/subtitle tracks when present). So you don't longer need to manually add tracks for each episode.
 
-## What it does
 
-Given a root folder, it recursively scans files and groups them by episode number based on the filename:
+## Usage
 
-- Matches `E01`, `E02`, ... (pattern `E(\d\d)`)
-- Or any two-digit number `01`, `02`, ... (pattern `\d\d`)
+ - Download executable application file from [releases](https://github.com/akoidan/media-launcher/releases)
+ - Run it either by opening it, either passing folder with TV series path as first argument
+ - It will generate launch scripts in the video folder
 
-Supported file types:
+For archlinux you can also install it via `yay -S media-launcher` or `paru -S media-launcher`
 
-- `*.mkv` (video)
-- `*.mka` (additional audio tracks)
-- `*.ass` (subtitles)
-- `*.ttf` (fonts are allowed but ignored when grouping)
+## Tests
 
-It also detects a fonts directory (a folder whose name contains `font` or `шрифты`) and, if found, adds it to the command via `--sub-fonts-dir`.
-
-## Requirements
-
-- **Rust** (only needed if you build locally)
-- **mpv** installed and available in `PATH`
-
-Notes:
-
-- On non-Windows platforms the generated scripts are made executable.
-- The tool writes scripts into the provided `root_dir` and may overwrite existing `NN.bash` / `NN.cmd` files.
-
-## Run locally
-
-From the repository root:
-
-```bash
-cargo run -- <root_dir>
+```sh
+cargo test --test mock_fs_tests
 ```
 
-Select a player (defaults to `mpv`):
 
-```bash
-cargo run -- <root_dir> --player mpv
+### Generate test fixtures
+
+```sh
+cargo run -p xtask -- dump-fixture "D:\movies\Kaijuu 8 Gou TV-2 [WEB-DL 1080p]"
 ```
 
-```bash
-cargo run -- <root_dir> --player vlc
+Will create `tests\fixtures\Kimetsu.no.Yaiba.Katanakaji.no.Sato.hen.WEB-DL.1080p`
+
+
+## Lint
+
+
+```sh
+cargo fmt-check
+cargo lint
 ```
 
-Example:
+## Autoformat
 
-```bash
-cargo run -- "/media/Shows/MyShow/Season 01"
+```sh
+cargo fmt --all -- --check
 ```
-
-Build a release binary:
-
-```bash
-cargo build --release
-```
-
-Binary location:
-
-- Linux/macOS: `target/release/media-launcher`
-- Windows: `target\release\media-launcher.exe`
-
-## Use from GitHub Releases
-
-1. Go to the repository **Releases** page.
-2. Download the archive for your OS (Linux or Windows).
-3. Extract it.
-4. Run it, passing the folder you want to scan:
-
-Linux/macOS:
-
-```bash
-./media-launcher /path/to/episode-folder
-```
-
-With VLC:
-
-```bash
-./media-launcher /path/to/episode-folder --player vlc
-```
-
-Windows (PowerShell):
-
-```powershell
-.\media-launcher.exe C:\Path\To\EpisodeFolder
-```
-
-With VLC:
-
-```powershell
-.\media-launcher.exe C:\Path\To\EpisodeFolder --player vlc
-```
-
-After running, you’ll find generated `NN.bash` / `NN.cmd` scripts in that folder; run the script for the episode you want to watch.
-
-## Example folder layout
-
-```
-Season 01/
-  E01.mkv
-  E01.ass
-  E01.mka
-  E02.mkv
-  fonts/
-    SomeFont.ttf
-```
-
-Running `media-launcher` on `Season 01/` will generate `01.bash`/`01.cmd`, `02.bash`/`02.cmd`, etc.

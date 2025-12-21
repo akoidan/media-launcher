@@ -1,8 +1,11 @@
 use std::path::PathBuf;
 
-use crate::EpisodeFiles;
-
+use anyhow::{anyhow, Result};
 use clap::ValueEnum;
+
+use crate::fs_access::Fs;
+use crate::media_scan::EpisodeFiles;
+use crate::os;
 
 mod mpv;
 mod vlc;
@@ -16,27 +19,83 @@ pub enum PlayerKind {
     Vlc,
 }
 
-pub fn create_player(kind: PlayerKind) -> Box<dyn Player> {
-    match kind {
-        PlayerKind::Mpv => Box::new(MpvPlayer {}),
-        PlayerKind::Vlc => Box::new(VlcPlayer {}),
+impl PlayerKind {
+    fn base_name(self) -> &'static str {
+        match self {
+            PlayerKind::Mpv => "mpv",
+            PlayerKind::Vlc => "vlc",
+        }
+    }
+
+    fn decorated_name(self) -> String {
+        os::decorate_program_name(self.base_name())
+    }
+
+    fn is_available_with(self, fs_access: &impl Fs) -> bool {
+        os::is_program_in_path_with(fs_access, self.base_name())
     }
 }
 
+#[allow(dead_code)]
+pub fn resolve_player(requested: Option<PlayerKind>) -> Result<Box<dyn Player>> {
+    resolve_player_with(&crate::fs_access::RealFs, requested)
+}
+
+pub fn resolve_player_with(
+    fs_access: &impl Fs,
+    requested: Option<PlayerKind>,
+) -> Result<Box<dyn Player>> {
+    let kind = match requested {
+        Some(kind) => {
+            if !kind.is_available_with(fs_access) {
+                return Err(anyhow!(
+                    "Player '{}' not found in PATH",
+                    kind.decorated_name()
+                ));
+            }
+            kind
+        }
+        None => {
+            let mpv_available = PlayerKind::Mpv.is_available_with(fs_access);
+            let vlc_available = PlayerKind::Vlc.is_available_with(fs_access);
+
+            match (mpv_available, vlc_available) {
+                (true, _) => PlayerKind::Mpv,
+                (false, true) => PlayerKind::Vlc,
+                (false, false) => {
+                    return Err(anyhow!(
+                        "No supported players found in PATH (tried '{}' and '{}')",
+                        PlayerKind::Mpv.decorated_name(),
+                        PlayerKind::Vlc.decorated_name()
+                    ));
+                }
+            }
+        }
+    };
+
+    Ok(match kind {
+        PlayerKind::Mpv => Box::new(MpvPlayer {}),
+        PlayerKind::Vlc => Box::new(VlcPlayer {}),
+    })
+}
+
 pub trait Player {
-    fn program_name(&self) -> &'static str;
+    fn program_name(&self) -> String;
 
     fn build_launch_command(
         &self,
         value: &EpisodeFiles,
         font_dir: &Option<PathBuf>,
-    ) -> Option<String> {
-        let video = value.video.as_ref()?;
+    ) -> Result<String> {
+        let video = value
+            .video
+            .as_ref()
+            .ok_or_else(|| anyhow!("Main video file not found"))?;
         let mut cmd = format!("{} \"{}\"", self.program_name(), video.display());
         self.append_audio_args(&mut cmd, &value.audio);
         self.append_subtitle_args(&mut cmd, &value.subtitles);
         self.append_font_args(&mut cmd, font_dir);
-        Some(cmd)
+        Ok(cmd)
     }
 
     fn append_audio_args(&self, cmd: &mut String, audio: &[PathBuf]);
