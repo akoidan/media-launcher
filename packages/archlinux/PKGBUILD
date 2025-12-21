@@ -1,5 +1,4 @@
 # Maintainer: Andrew Koidan <deathangel908@gmail.com>
-# Contributor: Alex Hirzel <alex at hirzel period us>
 pkgname=media-launcher
 pkgbase=media-launcher
 pkgver=cb31997
@@ -11,12 +10,12 @@ license=("MIT")
 arch=('x86_64')
 
 source=(
-    "${pkgname}-${pkgver}-amd64.tar.gz::https://github.com/${releaser}/${pkgname}/releases/download/v${pkgver}/media-launcher.elf"
+    "${pkgname}::https://github.com/${releaser}/${pkgname}/releases/download/${pkgver}/media-launcher.elf"
 )
 
 sha256sums=('8be4e9d60dad3a42c06ffe60e5601a51fa9f20c16760a81def785faa2ee247da')
 
 
 package() {
-  install -D -m755 "${srcdir}/media-launcher.elf" "${pkgdir}/usr/bin/media-launcher"
+  install -D -m755 "${srcdir}/media-launcher" "${pkgdir}/usr/bin/media-launcher"
 }
