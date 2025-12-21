@@ -13,12 +13,11 @@ mod players;
 #[path = "../src/app.rs"]
 mod app;
 
-mod test_vfs;
-
 use serde::Deserialize;
 use serde_json::Value;
 
 use std::{
+    collections::{BTreeSet, HashMap},
     env,
     path::{Path, PathBuf},
     sync::{Mutex, OnceLock},
@@ -26,7 +25,82 @@ use std::{
 
 use fs_access::Fs;
 
-use test_vfs::VfsFs;
+#[derive(Debug, Default)]
+struct MockFs {
+    dirs: BTreeSet<PathBuf>,
+    files: BTreeSet<PathBuf>,
+    dir_entries: HashMap<PathBuf, Vec<PathBuf>>,
+    file_contents: HashMap<PathBuf, Vec<u8>>,
+    writes: Mutex<Vec<(PathBuf, Vec<u8>)>>,
+}
+
+impl MockFs {
+    fn push_unique(list: &mut Vec<PathBuf>, item: PathBuf) {
+        if !list.contains(&item) {
+            list.push(item);
+        }
+    }
+
+    fn add_dir(&mut self, dir: PathBuf) {
+        if let Some(parent) = dir.parent() {
+            let parent = parent.to_path_buf();
+            self.dirs.insert(parent.clone());
+            self.dir_entries.entry(parent.clone()).or_default();
+            let list = self.dir_entries.entry(parent).or_default();
+            Self::push_unique(list, dir.clone());
+        }
+
+        self.dirs.insert(dir.clone());
+        self.dir_entries.entry(dir).or_default();
+    }
+
+    fn add_file(&mut self, file: PathBuf) {
+        if let Some(parent) = file.parent() {
+            let parent = parent.to_path_buf();
+            self.add_dir(parent.clone());
+            let list = self.dir_entries.entry(parent).or_default();
+            Self::push_unique(list, file.clone());
+        }
+        self.files.insert(file);
+    }
+
+    fn put_input_file(&mut self, file: PathBuf, contents: &[u8]) {
+        self.add_file(file.clone());
+        self.file_contents.insert(file, contents.to_vec());
+    }
+}
+
+impl Fs for MockFs {
+    fn read_dir_paths(&self, dir: &Path) -> anyhow::Result<Vec<PathBuf>> {
+        let mut v = self.dir_entries.get(dir).cloned().unwrap_or_default();
+        v.sort();
+        Ok(v)
+    }
+
+    fn is_dir(&self, path: &Path) -> bool {
+        self.dirs.contains(path)
+    }
+
+    fn is_file(&self, path: &Path) -> bool {
+        self.files.contains(path)
+    }
+
+    fn write(&self, path: &Path, contents: &[u8]) -> anyhow::Result<()> {
+        // Writes are the program outputs (scripts). Record them.
+        let mut writes = self.writes.lock().unwrap();
+        writes.push((path.to_path_buf(), contents.to_vec()));
+        Ok(())
+    }
+
+    fn canonicalize(&self, path: &Path) -> anyhow::Result<PathBuf> {
+        Ok(path.to_path_buf())
+    }
+
+    fn set_executable(&self, path: &Path) -> anyhow::Result<()> {
+        let _ = path;
+        Ok(())
+    }
+}
 
 fn env_lock() -> &'static Mutex<()> {
     static LOCK: OnceLock<Mutex<()>> = OnceLock::new();
@@ -50,17 +124,13 @@ struct FixtureInput {
     expected_unix_writes: std::collections::BTreeMap<String, String>,
 }
 
-fn norm_path_for_compare(path: &Path) -> String {
-    path.to_string_lossy().replace('\\', "/")
-}
-
-fn populate_tree(fs: &VfsFs, base: &Path, node: &Value) {
+fn populate_tree(fs: &mut MockFs, base: &Path, node: &Value) {
     match node {
         Value::String(contents) => {
-            fs.put_file(base, contents.as_bytes()).unwrap();
+            fs.put_input_file(base.to_path_buf(), contents.as_bytes());
         }
         Value::Object(map) => {
-            fs.ensure_dir(base).unwrap();
+            fs.add_dir(base.to_path_buf());
             for (name, child) in map {
                 populate_tree(fs, &base.join(name), child);
             }
@@ -76,7 +146,7 @@ fn golden_fixture_solo_leveling() {
     let _guard = env_lock().lock().unwrap();
 
     let input: FixtureInput = serde_json::from_str(include_str!(
-        "fixtures/solo-leveling.json"
+        "fixtures/Solo Leveling TV-2.json"
     ))
     .unwrap();
 
@@ -92,20 +162,20 @@ fn golden_fixture_solo_leveling() {
         }
     };
 
-    let fs = VfsFs::default();
+    let mut fs = MockFs::default();
     let root = PathBuf::from(&input.root);
 
-    fs.ensure_dir(&root).unwrap();
+    fs.add_dir(root.clone());
 
-    populate_tree(&fs, &root, &input.files);
+    populate_tree(&mut fs, &root, &input.files);
 
     for d in &input.path_dirs {
-        fs.ensure_dir(&PathBuf::from(d)).unwrap();
+        fs.add_dir(PathBuf::from(d));
     }
 
     for bin in &input.binaries {
         let decorated = os::decorate_program_name(bin);
-        fs.create_file(&PathBuf::from("bin").join(decorated)).unwrap();
+        fs.add_file(PathBuf::from("bin").join(decorated));
     }
 
     let old_path = env::var_os("PATH");
@@ -138,7 +208,7 @@ fn golden_fixture_solo_leveling() {
         .iter()
         .map(|(p, bytes)| {
             (
-                norm_path_for_compare(p),
+                p.to_string_lossy().to_string(),
                 String::from_utf8_lossy(bytes).to_string(),
             )
         })
