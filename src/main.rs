@@ -1,49 +1,12 @@
-use std::path::PathBuf;
-
 use anyhow::Result;
 use clap::Parser;
 
-use crate::fs_access::{Fs, RealFs};
-
-mod media_scan;
+mod app;
 mod fs_access;
+mod media_scan;
 mod os;
 mod players;
 
-#[derive(Parser, Debug)]
-#[command(author, version, about)]
-struct Args {
-    /// Root directory to scan (episode folder)
-    #[arg(value_parser = media_scan::validate_root_dir)]
-    root_dir: Option<PathBuf>,
-
-    #[arg(long, value_enum)]
-    player: Option<players::PlayerKind>,
-}
-
 fn main() -> Result<()> {
-    let args = Args::parse();
-
-    let root_dir = match args.root_dir {
-        Some(p) => RealFs.canonicalize(&p)?,
-        None => media_scan::pick_directory()?,
-    };
-
-    let player = players::resolve_player(args.player)?;
-
-    let (structure, font_dir) = media_scan::scan_dir(&root_dir)?;
-
-    for (episode, value) in structure {
-        let open_cmd = match player.build_launch_command(&value, &font_dir) {
-            Ok(cmd) => cmd,
-            Err(e) => {
-                eprintln!("Skipping episode {episode}: {e}");
-                continue;
-            }
-        };
-
-        media_scan::write_episode_script(&root_dir, episode, &open_cmd)?;
-    }
-
-    Ok(())
+    app::run(app::Args::parse())
 }

@@ -148,7 +148,7 @@ pub fn write_episode_script_with(
 ) -> Result<()> {
     let script_path = root_dir.join(format!("{:02}.{}", episode, os::script_ext()));
     fs_access.write(&script_path, open_cmd.as_bytes())?;
-    os::set_script_permissions(&script_path)?;
+    os::set_script_permissions_with(fs_access, &script_path)?;
     println!("{}", script_path.display());
     Ok(())
 }

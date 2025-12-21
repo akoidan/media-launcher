@@ -3,6 +3,7 @@ use std::path::PathBuf;
 use anyhow::{anyhow, Result};
 use clap::ValueEnum;
 
+use crate::fs_access::Fs;
 use crate::media_scan::EpisodeFiles;
 use crate::os;
 
@@ -30,15 +31,19 @@ impl PlayerKind {
         os::decorate_program_name(self.base_name())
     }
 
-    fn is_available(self) -> bool {
-        os::is_program_in_path(self.base_name())
+    fn is_available_with(self, fs_access: &impl Fs) -> bool {
+        os::is_program_in_path_with(fs_access, self.base_name())
     }
 }
 
 pub fn resolve_player(requested: Option<PlayerKind>) -> Result<Box<dyn Player>> {
+    resolve_player_with(&crate::fs_access::RealFs, requested)
+}
+
+pub fn resolve_player_with(fs_access: &impl Fs, requested: Option<PlayerKind>) -> Result<Box<dyn Player>> {
     let kind = match requested {
         Some(kind) => {
-            if !kind.is_available() {
+            if !kind.is_available_with(fs_access) {
                 return Err(anyhow!(
                     "Player '{}' not found in PATH",
                     kind.decorated_name()
@@ -47,8 +52,8 @@ pub fn resolve_player(requested: Option<PlayerKind>) -> Result<Box<dyn Player>> 
             kind
         }
         None => {
-            let mpv_available = PlayerKind::Mpv.is_available();
-            let vlc_available = PlayerKind::Vlc.is_available();
+            let mpv_available = PlayerKind::Mpv.is_available_with(fs_access);
+            let vlc_available = PlayerKind::Vlc.is_available_with(fs_access);
 
             match (mpv_available, vlc_available) {
                 (true, _) => PlayerKind::Mpv,

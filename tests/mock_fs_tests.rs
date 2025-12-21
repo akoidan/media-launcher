@@ -7,8 +7,14 @@ mod os;
 #[path = "../src/media_scan.rs"]
 mod media_scan;
 
+#[path = "../src/players/mod.rs"]
+mod players;
+
+#[path = "../src/app.rs"]
+mod app;
+
 use std::{
-    collections::{BTreeMap, BTreeSet, HashMap},
+    collections::{BTreeSet, HashMap},
     env,
     path::{Path, PathBuf},
     sync::{Mutex, OnceLock},
@@ -16,12 +22,23 @@ use std::{
 
 use fs_access::Fs;
 
-#[derive(Debug, Default)]
+#[derive(Debug)]
 struct MockFs {
     dirs: BTreeSet<PathBuf>,
     files: BTreeSet<PathBuf>,
     dir_entries: HashMap<PathBuf, Vec<PathBuf>>,
-    writes: HashMap<PathBuf, Vec<u8>>,
+    writes: Mutex<HashMap<PathBuf, Vec<u8>>>,
+}
+
+impl Default for MockFs {
+    fn default() -> Self {
+        Self {
+            dirs: BTreeSet::new(),
+            files: BTreeSet::new(),
+            dir_entries: HashMap::new(),
+            writes: Mutex::new(HashMap::new()),
+        }
+    }
 }
 
 impl MockFs {
@@ -68,9 +85,9 @@ impl Fs for MockFs {
     }
 
     fn write(&self, path: &Path, contents: &[u8]) -> anyhow::Result<()> {
-        // We don't need write support in tests; if it happens, fail loudly.
-        let _ = (path, contents);
-        Err(anyhow::anyhow!("MockFs::write not supported in this test"))
+        let mut writes = self.writes.lock().unwrap();
+        writes.insert(path.to_path_buf(), contents.to_vec());
+        Ok(())
     }
 
     fn canonicalize(&self, path: &Path) -> anyhow::Result<PathBuf> {
@@ -86,6 +103,10 @@ impl Fs for MockFs {
 fn env_lock() -> &'static Mutex<()> {
     static LOCK: OnceLock<Mutex<()>> = OnceLock::new();
     LOCK.get_or_init(|| Mutex::new(()))
+}
+
+fn set_test_path(paths: &[PathBuf]) -> std::ffi::OsString {
+    env::join_paths(paths).unwrap()
 }
 
 #[test]
@@ -148,8 +169,7 @@ fn is_program_in_path_with_mock_fs_uses_fs_for_existence() {
     fs.add_file(bin2.join(decorated));
 
     let old_path = env::var_os("PATH");
-    let new_path = env::join_paths([bin1.clone(), bin2.clone()]).unwrap();
-    env::set_var("PATH", &new_path);
+    env::set_var("PATH", set_test_path(&[bin1.clone(), bin2.clone()]));
 
     let ok = os::is_program_in_path_with(&fs, "mpv");
 
@@ -160,4 +180,60 @@ fn is_program_in_path_with_mock_fs_uses_fs_for_existence() {
     }
 
     assert!(ok);
+}
+
+#[test]
+fn app_run_with_mock_fs_writes_scripts() {
+    let _guard = env_lock().lock().unwrap();
+
+    let mut fs = MockFs::default();
+
+    let root = PathBuf::from("root");
+    let rus = root.join("RUS Sound");
+    let sub = root.join("SUB");
+
+    fs.add_dir(root.clone());
+    fs.add_child_dir(root.clone(), rus.clone());
+    fs.add_child_dir(root.clone(), sub.clone());
+
+    for ep in 13..=14 {
+        let hash = format!("HASH{ep:02}");
+
+        fs.add_file(root.join(format!(
+            "[SubsPlease] Solo Leveling - {ep:02} (1080p) [{hash}].mkv"
+        )));
+        fs.add_file(rus.join(format!(
+            "[SubsPlease] Solo Leveling - {ep:02} (1080p) [{hash}].mka"
+        )));
+        fs.add_file(sub.join(format!(
+            "[SubsPlease] Solo Leveling - {ep:02} (1080p) [{hash}].ass"
+        )));
+    }
+
+    let bin = PathBuf::from("bin");
+    fs.add_dir(bin.clone());
+    fs.add_file(bin.join(os::decorate_program_name("mpv")));
+
+    let old_path = env::var_os("PATH");
+    env::set_var("PATH", set_test_path(&[bin.clone()]));
+
+    let args = app::Args {
+        root_dir: Some(root.clone()),
+        player: Some(players::PlayerKind::Mpv),
+    };
+
+    let result = app::run_with(&fs, args);
+
+    if let Some(p) = old_path {
+        env::set_var("PATH", p);
+    } else {
+        env::remove_var("PATH");
+    }
+
+    result.unwrap();
+
+    let ext = os::script_ext();
+    let writes = fs.writes.lock().unwrap();
+    assert!(writes.contains_key(&root.join(format!("13.{ext}"))));
+    assert!(writes.contains_key(&root.join(format!("14.{ext}"))));
 }
