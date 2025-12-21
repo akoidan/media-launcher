@@ -1,5 +1,6 @@
 use std::{
     collections::BTreeMap,
+    env,
     ffi::OsStr,
     fs,
     path::{Path, PathBuf},
@@ -7,8 +8,8 @@ use std::{
 
 use anyhow::{Context, Result};
 use clap::Parser;
-use serde_json::{Map, Value};
 use serde::{Deserialize, Serialize};
+use serde_json::{Map, Value};
 
 #[derive(Parser, Debug)]
 struct Args {
@@ -34,7 +35,6 @@ fn insert_path_with_value(tree: &mut Map<String, Value>, parts: &[String], value
     match entry {
         Value::Object(map) => insert_path_with_value(map, tail, value),
         Value::String(_) => {
-            // Path conflict (file vs dir). Prefer dir shape.
             *entry = Value::Object(Map::new());
             if let Value::Object(map) = entry {
                 insert_path_with_value(map, tail, value);
@@ -66,6 +66,22 @@ fn rel_parts(root: &Path, full: &Path) -> Result<Vec<String>> {
     Ok(parts)
 }
 
+fn normalize_root_string(path: &Path) -> String {
+    let s = path.to_string_lossy().to_string();
+
+    #[cfg(windows)]
+    {
+        if let Some(rest) = s.strip_prefix(r"\\?\UNC\") {
+            return format!(r"\\{}", rest);
+        }
+        if let Some(rest) = s.strip_prefix(r"\\?\") {
+            return rest.to_string();
+        }
+    }
+
+    s
+}
+
 fn expected_key_abs(root: &Path, full: &Path, sep: char, normalize_root_seps: bool) -> Result<String> {
     let parts = rel_parts(root, full)?;
 
@@ -93,25 +109,16 @@ struct FixtureOut {
     expected_unix_writes: BTreeMap<String, String>,
 }
 
-fn normalize_root_string(path: &Path) -> String {
-    let s = path.to_string_lossy().to_string();
-
-    #[cfg(windows)]
-    {
-        // Path::canonicalize on Windows can produce verbatim paths like \\?\D:\... or \\?\UNC\server\share\...
-        if let Some(rest) = s.strip_prefix(r"\\?\UNC\") {
-            return format!(r"\\{}", rest);
-        }
-        if let Some(rest) = s.strip_prefix(r"\\?\") {
-            return rest.to_string();
-        }
+fn main() -> Result<()> {
+    let raw_args: Vec<std::ffi::OsString> = env::args_os().collect();
+    if raw_args.len() <= 1 {
+        eprintln!(
+            "Usage:\n  cargo test --test dump_fixture -- \"<INPUT_DIR>\"\n\nThis target is a fixture generator and is not meant to run during the normal test suite."
+        );
+        return Ok(());
     }
 
-    s
-}
-
-fn main() -> Result<()> {
-    let args = Args::parse();
+    let args = Args::parse_from(raw_args);
     let root = args
         .input_dir
         .canonicalize()
