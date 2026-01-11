@@ -1,49 +1,27 @@
 # media-launcher
 
-`media-launcher` scans a TV season folder and generates `NN.cmd`/`NN.bash` launch scripts to play each episode (including matching audio/subtitle tracks).
+`media-launcher` generates per-episode launch scripts that play a video together with matching **external audio and subtitle files**.
 
-For each episode it finds, it creates:
+## How to use
+- Download executable application file from [releases](https://github.com/akoidan/media-launcher/releases)
+- Run it either by opening it, either passing folder with TV series path as first argument
+- THe app will scan **TV season folder** and matche each episode with its external audio and subtitle tracks using smart `\d\d` pattern.
+- It will generater one launcher per episode (`01`, `02`, …):
+  - **Linux / macOS:** `01.bash`, `02.bash`, …
+  - **Windows:** `01.cmd`, `02.cmd`, …
+- Open the corresponding launcher by double clicking on it and the player should open automatically.
 
-- On Linux/macOS: `01.bash`, `02.bash`, ...
-- On Windows: `01.cmd`, `02.cmd`, ...
+## Playback
 
-Each script launches the episode in **mpv** or **vlc** players (and adds extra audio/subtitle tracks when present). So you don't longer need to manually add tracks for each episode.
+- Uses **mpv** or **VLC** (must be available in `$PATH`)
+- If both are found, **mpv is preferred**
+- If only one is found, it is used automatically
+- All matching audio and subtitle tracks are attached
 
+## OS
+- Windows: Download `.exe` file from [releases](https://github.com/akoidan/media-launcher/releases)
+- Arhclinux `yay -S media-launcher` or `paru -S media-launcher`
+- Other Linux distro: : Download `.elf` file from [releases](https://github.com/akoidan/media-launcher/releases)
 
-## Usage
-
- - Download executable application file from [releases](https://github.com/akoidan/media-launcher/releases)
- - Run it either by opening it, either passing folder with TV series path as first argument
- - It will generate launch scripts in the video folder
-
-For archlinux you can also install it via `yay -S media-launcher` or `paru -S media-launcher`
-
-## Tests
-
-```sh
-cargo test --test mock_fs_tests
-```
-
-
-### Generate test fixtures
-
-```sh
-cargo run -p xtask -- dump-fixture "D:\movies\Kaijuu 8 Gou TV-2 [WEB-DL 1080p]"
-```
-
-Will create `tests\fixtures\Kimetsu.no.Yaiba.Katanakaji.no.Sato.hen.WEB-DL.1080p`
-
-
-## Lint
-
-
-```sh
-cargo fmt-check
-cargo lint
-```
-
-## Autoformat
-
-```sh
-cargo fmt --all -- --check
-```
+## Development
+See [DEVELOPMENT.md](./DEVELOPMENT.md)
