@@ -12,12 +12,7 @@ use rfd::FileDialog;
 use crate::fs_access::{Fs, RealFs};
 use crate::os;
 
-static RE_E: OnceLock<Regex> = OnceLock::new();
 static RE_2D: OnceLock<Regex> = OnceLock::new();
-
-fn re_e() -> &'static Regex {
-    RE_E.get_or_init(|| Regex::new(r"E(\d\d)").expect("Invalid RE_E regex"))
-}
 
 fn re_2d() -> &'static Regex {
     RE_2D.get_or_init(|| Regex::new(r"\d\d").expect("Invalid RE_2D regex"))
@@ -67,14 +62,37 @@ fn is_supported_file(path: &Path) -> bool {
     )
 }
 
-fn extract_episode_number(file_name: &str) -> Option<u32> {
-    if let Some(caps) = re_e().captures(file_name) {
-        return caps.get(1).and_then(|m| m.as_str().parse::<u32>().ok());
+fn extract_episode_number(file_name: &str) -> Result<u32> {
+    // Try pattern with whitespace on both sides first
+    let re_with_spaces = Regex::new(r"\b\d\d\b")?;
+    if let Some(m) = re_with_spaces.find(file_name) {
+        return Ok(m.as_str().parse::<u32>()?);
     }
 
-    re_2d()
-        .find(file_name)
-        .and_then(|m| m.as_str().parse::<u32>().ok())
+    // Try pattern with space after
+    if let Some(m) = re_2d().find(file_name) {
+        let matched = m.as_str();
+        if matched.ends_with(' ') {
+            return Ok(matched.trim().parse::<u32>()?);
+        }
+    }
+
+    // Try pattern with space before
+    if let Some(m) = re_2d().find(file_name) {
+        let matched = m.as_str();
+        if matched.starts_with(' ') {
+            return Ok(matched.trim().parse::<u32>()?);
+        }
+    }
+
+    // Try standalone two digits
+    if let Some(m) = re_2d().find(file_name) {
+        return Ok(m.as_str().parse::<u32>()?);
+    }
+
+    Err(anyhow!(
+        "Unable to parse episode number from file name: {file_name}"
+    ))
 }
 
 fn handle_media_file(path: PathBuf, structure: &mut BTreeMap<u32, EpisodeFiles>) -> Result<()> {
@@ -96,10 +114,7 @@ fn handle_media_file(path: PathBuf, structure: &mut BTreeMap<u32, EpisodeFiles>)
         .and_then(OsStr::to_str)
         .ok_or_else(|| anyhow!("Cannot read file name for {}", path.display()))?;
 
-    let Some(episode) = extract_episode_number(file_name) else {
-        eprintln!("file {file_name} doesn't have epoisode #");
-        return Ok(());
-    };
+    let episode = extract_episode_number(file_name)?;
 
     let slot = structure.entry(episode).or_default();
 
@@ -155,8 +170,15 @@ pub fn write_episode_script_with(
     open_cmd: &str,
 ) -> Result<()> {
     let script_path = root_dir.join(format!("{:02}.{}", episode, os::script_ext()));
-    fs_access.write(&script_path, open_cmd.as_bytes())?;
-    os::set_script_permissions_with(fs_access, &script_path)?;
+    fs_access
+        .write(&script_path, open_cmd.as_bytes())
+        .with_context(|| format!("Failed to write script file: {}", script_path.display()))?;
+    os::set_script_permissions_with(fs_access, &script_path).with_context(|| {
+        format!(
+            "Failed to set script permissions: {}",
+            script_path.display()
+        )
+    })?;
     println!("{}", script_path.display());
     Ok(())
 }

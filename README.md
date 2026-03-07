@@ -24,4 +24,4 @@
 - Other Linux distro: : Download `.elf` file from [releases](https://github.com/akoidan/media-launcher/releases)
 
 ## Development
-See [DEVELOPMENT.md](./DEVELOPMENT.md)
+See [CONTRIBUTING.md](./CONTRIBUTING.md)
