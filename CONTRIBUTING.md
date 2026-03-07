@@ -25,5 +25,5 @@ cargo lint
 ## Autoformat
 
 ```sh
-cargo fmt --all -- --check
+cargo fmt --all --
 ```
