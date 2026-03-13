@@ -212,7 +212,9 @@ fn read_dir_recursive(
         }
 
         if fs_access.is_file(&path) {
-            handle_media_file(path, structure)?;
+            if let Err(e) = handle_media_file(path, structure) {
+                eprintln!("Error handling media file: {}", e);
+            }
         }
     }
 
