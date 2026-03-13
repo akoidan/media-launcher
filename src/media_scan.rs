@@ -58,7 +58,7 @@ fn is_supported_file(path: &Path) -> bool {
     let ext = path.extension().and_then(OsStr::to_str).unwrap_or("");
     matches!(
         ext.to_ascii_lowercase().as_str(),
-        "mkv" | "ass" | "mka" | "ttf"
+        "mkv" | "ass" | "mka" | "ttf" | "mp4"
     )
 }
 
@@ -126,6 +126,7 @@ fn handle_media_file(path: PathBuf, structure: &mut BTreeMap<u32, EpisodeFiles>)
         .as_str()
     {
         "mkv" => slot.video = Some(path),
+        "mp4" => slot.video = Some(path),
         "ass" => slot.subtitles.push(path),
         "mka" => slot.audio.push(path),
         _ => {
