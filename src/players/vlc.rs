@@ -11,8 +11,16 @@ impl Player for VlcPlayer {
     }
 
     fn append_audio_args(&self, cmd: &mut String, audio: &[PathBuf]) {
-        for a in audio {
-            cmd.push_str(&format!(" --input-slave=\"{}\"", a.display()));
+        // VLC's --input-slave is a single-value option: repeating the flag
+        // overwrites the previous value instead of appending, so all slaves
+        // must be combined into one value separated by '#'.
+        if !audio.is_empty() {
+            let joined = audio
+                .iter()
+                .map(|a| a.display().to_string())
+                .collect::<Vec<_>>()
+                .join("#");
+            cmd.push_str(&format!(" --input-slave=\"{joined}\""));
         }
     }
 

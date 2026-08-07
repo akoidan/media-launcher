@@ -38,7 +38,18 @@ impl Fs for RealFs {
     }
 
     fn canonicalize(&self, path: &Path) -> Result<PathBuf> {
-        Ok(std::fs::canonicalize(path)?)
+        // std::fs::canonicalize returns \\?\ verbatim paths on Windows, which
+        // external players like VLC choke on. Strip the prefix back to a
+        // regular drive/UNC path since these are ordinary local paths.
+        let canonical = std::fs::canonicalize(path)?;
+        let s = canonical.to_string_lossy();
+        Ok(if let Some(rest) = s.strip_prefix(r"\\?\UNC\") {
+            PathBuf::from(format!(r"\\{rest}"))
+        } else if let Some(rest) = s.strip_prefix(r"\\?\") {
+            PathBuf::from(rest)
+        } else {
+            canonical
+        })
     }
 
     fn set_executable(&self, path: &Path) -> Result<()> {
