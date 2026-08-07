@@ -130,6 +130,7 @@ fn handle_media_file(path: PathBuf, structure: &mut BTreeMap<u32, EpisodeFiles>)
         "ass" => slot.subtitles.push(path),
         "mka" => slot.audio.push(path),
         _ => {
+            println!("Unknown file type: {}", path.display());
             // ignore (e.g. ttf)
         }
     }
