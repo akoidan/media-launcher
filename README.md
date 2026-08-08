@@ -24,7 +24,12 @@ Cross-platform, scriptable, and built for **MPV**/**VLC** players
 - Windows: Download `.exe` file from [releases](https://github.com/akoidan/media-launcher/releases)
 - Arhclinux `yay -S media-launcher` or `paru -S media-launcher`
 - Other Linux distro: : Download `.elf` file from [releases](https://github.com/akoidan/media-launcher/releases)
-- macos `brew tap akoidan/media-launcher https://github.com/akoidan/media-launcher && brew install media-launcher`
+- macos 
+```bash
+brew tap akoidan/media-launcher https://github.com/akoidan/media-launcher
+brew trust akoidan/media-launcher
+brew install media-launcher
+```
 
 ## Development
 See [CONTRIBUTING.md](./CONTRIBUTING.md)
