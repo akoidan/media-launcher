@@ -1,13 +1,14 @@
 use std::path::PathBuf;
 
 use super::Player;
-use crate::os;
 
-pub struct MpvPlayer {}
+pub struct MpvPlayer {
+    pub program_name: String,
+}
 
 impl Player for MpvPlayer {
-    fn program_name(&self) -> String {
-        os::decorate_program_name("mpv")
+    fn program_name(&self) -> &str {
+        &self.program_name
     }
 
     fn append_audio_args(&self, cmd: &mut String, audio: &[PathBuf]) {

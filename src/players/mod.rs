@@ -20,19 +20,11 @@ pub enum PlayerKind {
 }
 
 impl PlayerKind {
-    fn base_name(self) -> &'static str {
+    fn key(self) -> &'static str {
         match self {
             PlayerKind::Mpv => "mpv",
             PlayerKind::Vlc => "vlc",
         }
-    }
-
-    fn decorated_name(self) -> String {
-        os::decorate_program_name(self.base_name())
-    }
-
-    fn is_available_with(self, fs_access: &impl Fs) -> bool {
-        os::is_program_in_path_with(fs_access, self.base_name())
     }
 }
 
@@ -45,28 +37,24 @@ pub fn resolve_player_with(
     fs_access: &impl Fs,
     requested: Option<PlayerKind>,
 ) -> Result<Box<dyn Player>> {
-    let kind = match requested {
+    let (kind, program_name) = match requested {
         Some(kind) => {
-            if !kind.is_available_with(fs_access) {
-                return Err(anyhow!(
-                    "Player '{}' not found in PATH",
-                    kind.decorated_name()
-                ));
-            }
-            kind
+            let program_name = os::resolve_program_name_with(fs_access, kind.key())
+                .ok_or_else(|| anyhow!("Player '{}' not found in PATH", kind.key()))?;
+            (kind, program_name)
         }
         None => {
-            let mpv_available = PlayerKind::Mpv.is_available_with(fs_access);
-            let vlc_available = PlayerKind::Vlc.is_available_with(fs_access);
+            let mpv = os::resolve_program_name_with(fs_access, PlayerKind::Mpv.key());
+            let vlc = os::resolve_program_name_with(fs_access, PlayerKind::Vlc.key());
 
-            match (mpv_available, vlc_available) {
-                (true, _) => PlayerKind::Mpv,
-                (false, true) => PlayerKind::Vlc,
-                (false, false) => {
+            match (mpv, vlc) {
+                (Some(name), _) => (PlayerKind::Mpv, name),
+                (None, Some(name)) => (PlayerKind::Vlc, name),
+                (None, None) => {
                     return Err(anyhow!(
                         "No supported players found in PATH (tried '{}' and '{}')",
-                        PlayerKind::Mpv.decorated_name(),
-                        PlayerKind::Vlc.decorated_name()
+                        PlayerKind::Mpv.key(),
+                        PlayerKind::Vlc.key()
                     ));
                 }
             }
@@ -74,13 +62,13 @@ pub fn resolve_player_with(
     };
 
     Ok(match kind {
-        PlayerKind::Mpv => Box::new(MpvPlayer {}),
-        PlayerKind::Vlc => Box::new(VlcPlayer {}),
+        PlayerKind::Mpv => Box::new(MpvPlayer { program_name }),
+        PlayerKind::Vlc => Box::new(VlcPlayer { program_name }),
     })
 }
 
 pub trait Player {
-    fn program_name(&self) -> String;
+    fn program_name(&self) -> &str;
 
     fn build_launch_command(
         &self,

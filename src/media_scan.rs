@@ -172,8 +172,9 @@ pub fn write_episode_script_with(
     open_cmd: &str,
 ) -> Result<()> {
     let script_path = root_dir.join(format!("{:02}.{}", episode, os::script_ext()));
+    let contents = format!("{}{open_cmd}", os::script_header());
     fs_access
-        .write(&script_path, open_cmd.as_bytes())
+        .write(&script_path, contents.as_bytes())
         .with_context(|| format!("Failed to write script file: {}", script_path.display()))?;
     os::set_script_permissions_with(fs_access, &script_path).with_context(|| {
         format!(

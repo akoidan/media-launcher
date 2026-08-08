@@ -106,7 +106,7 @@ pub fn build_mock_fs(
     files: &Value,
     path_dirs: &[String],
     binaries: &[String],
-    decorate_program_name: impl Fn(&str) -> String,
+    path_program_name: impl Fn(&str) -> String,
 ) -> MockFs {
     let mut fs = MockFs::default();
 
@@ -118,7 +118,7 @@ pub fn build_mock_fs(
     }
 
     for bin in binaries {
-        let decorated = decorate_program_name(bin);
+        let decorated = path_program_name(bin);
         fs.add_file(PathBuf::from("bin").join(decorated));
     }
 
