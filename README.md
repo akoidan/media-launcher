@@ -1,6 +1,8 @@
 # media-launcher
 
-`media-launcher` generates per-episode launch scripts that play a video together with matching **external audio and subtitle files**.
+Media Launcher automatically matches TV episodes with their corresponding external audio and subtitle tracks and generates launch scripts for playback in your preferred video player.
+
+Cross-platform, scriptable, and built for **MPV**/**VLC** players
 
 ## How to use
 - Download executable application file from [releases](https://github.com/akoidan/media-launcher/releases)
