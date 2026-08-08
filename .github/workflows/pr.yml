@@ -74,6 +74,36 @@ jobs:
       - name: Tests
         run: cargo test --all-features
 
+  macos:
+    runs-on: macos-14
+    permissions: write-all
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: dtolnay/rust-toolchain@stable
+
+      - name: Restore cargo cache
+        id: cache-cargo
+        # DO not create cache for PRs, since they are not accessible withing different PRs
+        # Only restore them
+        uses: actions/cache/restore@v4
+        with:
+          path: |
+            ~/.cargo/registry
+            ~/.cargo/git
+            target
+          key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
+
+      - name: Cargo fetch
+        if: steps.cache-cargo.outputs.cache-hit != 'true'
+        run: cargo fetch
+
+      - name: Build (release)
+        run: cargo build --release
+
+      - name: Tests
+        run: cargo test --all-features
+
   win32:
     runs-on: windows-2022
     permissions: write-all

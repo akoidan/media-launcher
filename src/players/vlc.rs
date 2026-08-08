@@ -1,13 +1,14 @@
 use std::path::PathBuf;
 
 use super::Player;
-use crate::os;
 
-pub struct VlcPlayer {}
+pub struct VlcPlayer {
+    pub program_name: String,
+}
 
 impl Player for VlcPlayer {
-    fn program_name(&self) -> String {
-        os::decorate_program_name("vlc")
+    fn program_name(&self) -> &str {
+        &self.program_name
     }
 
     fn append_audio_args(&self, cmd: &mut String, audio: &[PathBuf]) {

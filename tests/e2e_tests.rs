@@ -57,6 +57,9 @@ struct FixtureInput {
     #[serde(default)]
     #[allow(dead_code)]
     expected_unix_writes: std::collections::BTreeMap<String, String>,
+    #[serde(default)]
+    #[allow(dead_code)]
+    expected_macos_writes: std::collections::BTreeMap<String, String>,
 }
 
 fn parse_fixture_input(fixture_path: &Path, fixture_json: &str) -> FixtureInput {
@@ -91,7 +94,12 @@ fn expected_writes(input: &FixtureInput) -> &std::collections::BTreeMap<String, 
         &input.expected_windows_writes
     }
 
-    #[cfg(not(windows))]
+    #[cfg(target_os = "macos")]
+    {
+        &input.expected_macos_writes
+    }
+
+    #[cfg(not(any(windows, target_os = "macos")))]
     {
         &input.expected_unix_writes
     }
@@ -169,7 +177,7 @@ fn run_fixture(fixture_path: &Path, fixture_json: &str) {
         &input.files,
         &input.path_dirs,
         &input.binaries,
-        os::decorate_program_name,
+        os::path_program_name,
     );
 
     let path_dirs = input
