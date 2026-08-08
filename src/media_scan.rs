@@ -51,7 +51,7 @@ pub fn validate_root_dir(s: &str) -> std::result::Result<PathBuf, String> {
 
 fn is_script_file(path: &Path) -> bool {
     let ext = path.extension().and_then(OsStr::to_str).unwrap_or("");
-    matches!(ext.to_ascii_lowercase().as_str(), "cmd" | "bash")
+    ext.eq_ignore_ascii_case(os::script_ext())
 }
 
 fn is_supported_file(path: &Path) -> bool {

@@ -28,6 +28,10 @@ pub fn player_locations(player: &str) -> Vec<PlayerLocation> {
             PlayerLocation::Path("mpv.exe".into()),
             PlayerLocation::Absolute(r"C:\Program Files\mpv\mpv.exe".into()),
         ],
+        "potplayer" => vec![
+            PlayerLocation::Path("PotPlayerMini64.exe".into()),
+            PlayerLocation::Absolute(r"C:\Program Files\DAUM\PotPlayer\PotPlayerMini64.exe".into()),
+        ],
         _ => vec![PlayerLocation::Path(player.into())],
     }
 }
