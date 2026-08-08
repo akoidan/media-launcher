@@ -27,6 +27,8 @@ pub enum PlayerLocation {
     /// Search every directory on $PATH for this executable name.
     Path(String),
     /// Check this exact absolute path (e.g. a known GUI app bundle location).
+    /// Unused on Linux, which only ever looks on PATH.
+    #[allow(dead_code)]
     Absolute(String),
 }
 
