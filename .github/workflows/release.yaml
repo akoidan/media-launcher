@@ -127,18 +127,31 @@ jobs:
 
   update-homebrew-formula:
     runs-on: ubuntu-24.04
+    needs: macos
     permissions: write-all
     steps:
       - uses: actions/checkout@v4
         with:
           ref: ${{ github.event.release.target_commitish }}
 
-      - name: Bump formula to the released tag
+      - name: Download released binaries and compute checksums
         run: |
           TAG="${{ github.event.release.tag_name }}"
-          VERSION="${TAG#v}"
-          sed -i "s/tag: \"[^\"]*\"/tag: \"${TAG}\"/" Formula/media-launcher.rb
+          BASE_URL="https://github.com/${{ github.repository }}/releases/download/${TAG}"
+          curl -sL -o arm64-binary "${BASE_URL}/media-launcher-macos-arm64"
+          curl -sL -o x86_64-binary "${BASE_URL}/media-launcher-macos-x86_64"
+          echo "ARM_SHA=$(sha256sum arm64-binary | cut -d' ' -f1)" >> "$GITHUB_ENV"
+          echo "INTEL_SHA=$(sha256sum x86_64-binary | cut -d' ' -f1)" >> "$GITHUB_ENV"
+          echo "TAG=${TAG}" >> "$GITHUB_ENV"
+          echo "VERSION=${TAG#v}" >> "$GITHUB_ENV"
+
+      - name: Update formula
+        run: |
+          ARM_URL="https://github.com/${{ github.repository }}/releases/download/${TAG}/media-launcher-macos-arm64"
+          INTEL_URL="https://github.com/${{ github.repository }}/releases/download/${TAG}/media-launcher-macos-x86_64"
           sed -i "s/version \"[^\"]*\"/version \"${VERSION}\"/" Formula/media-launcher.rb
+          sed -i "/on_arm do/,/end/ { s#url \".*\"#url \"${ARM_URL}\"#; s#sha256 \".*\"#sha256 \"${ARM_SHA}\"#; }" Formula/media-launcher.rb
+          sed -i "/on_intel do/,/end/ { s#url \".*\"#url \"${INTEL_URL}\"#; s#sha256 \".*\"#sha256 \"${INTEL_SHA}\"#; }" Formula/media-launcher.rb
 
       - name: Commit and push
         run: |
