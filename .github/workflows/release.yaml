@@ -124,3 +124,26 @@ jobs:
       - name: Tests
         if: matrix.target == 'aarch64-apple-darwin'
         run: cargo test --all-features --target ${{ matrix.target }}
+
+  update-homebrew-formula:
+    runs-on: ubuntu-24.04
+    permissions: write-all
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.release.target_commitish }}
+
+      - name: Bump formula to the released tag
+        run: |
+          TAG="${{ github.event.release.tag_name }}"
+          VERSION="${TAG#v}"
+          sed -i "s/tag: \"[^\"]*\"/tag: \"${TAG}\"/" Formula/media-launcher.rb
+          sed -i "s/version \"[^\"]*\"/version \"${VERSION}\"/" Formula/media-launcher.rb
+
+      - name: Commit and push
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add Formula/media-launcher.rb
+          git diff --cached --quiet || git commit -m "Update Homebrew formula to ${{ github.event.release.tag_name }}"
+          git push origin HEAD:${{ github.event.release.target_commitish }}
