@@ -1,0 +1,49 @@
+{
+  "root": {
+    "windows": "D:\\movies\\Big.Fish.and.Begonia.2016",
+    "linux": "/home/andrew/ntfs/movies"
+  },
+  "player": "potplayer",
+  "path_dirs": [
+    "bin"
+  ],
+  "binaries": [
+    "potplayer"
+  ],
+  "files": {
+    "Big.Fish.and.Begonia.2016.BDRemux.1080p.mkv": "",
+    "RUS Sound": {
+      "Big.Fish.and.Begonia.2016.BDRemux.1080p.AniDUB.mka": ""
+    },
+    "RUS Subs": {
+      "Bazaar Zetsubou": {
+        "Big.Fish.and.Begonia.2016.BDRemux.1080p.ass": "",
+        "Fonts": {
+          "AGPmode.ttf": "",
+          "Albertus Medium.ttf": "",
+          "Stylo Bold.ttf": "",
+          "Trajan Pro 3.otf": ""
+        }
+      },
+      "YakuSub Studio": {
+        "Big.Fish.and.Begonia.2016.BDRemux.1080p.ass": "",
+        "Fonts": {
+          "Arial.ttf": "",
+          "Book Antiqua Bold.ttf": "",
+          "Cambria Bold.ttf": "",
+          "DS BroadBrush.ttf": "",
+          "DS UncialFunnyHand Medium.ttf": ""
+        }
+      }
+    }
+  },
+  "expected_windows_writes": {
+    "D:\\movies\\Big.Fish.and.Begonia.2016\\20.cmd": "\"PotPlayerMini64.exe\" /same \"D:\\movies\\Big.Fish.and.Begonia.2016\\Big.Fish.and.Begonia.2016.BDRemux.1080p.mkv\" \"D:\\movies\\Big.Fish.and.Begonia.2016\\RUS Sound\\Big.Fish.and.Begonia.2016.BDRemux.1080p.AniDUB.mka\" /sub=\"D:\\movies\\Big.Fish.and.Begonia.2016\\RUS Subs\\Bazaar Zetsubou\\Big.Fish.and.Begonia.2016.BDRemux.1080p.ass\" /sub=\"D:\\movies\\Big.Fish.and.Begonia.2016\\RUS Subs\\YakuSub Studio\\Big.Fish.and.Begonia.2016.BDRemux.1080p.ass\""
+  },
+  "expected_unix_writes": {
+    "/home/andrew/ntfs/movies/Big.Fish.and.Begonia.2016/20.bash": "#!/bin/bash\n\"potplayer\" /same \"/home/andrew/ntfs/movies/Big.Fish.and.Begonia.2016/Big.Fish.and.Begonia.2016.BDRemux.1080p.mkv\" \"/home/andrew/ntfs/movies/Big.Fish.and.Begonia.2016/RUS Sound/Big.Fish.and.Begonia.2016.BDRemux.1080p.AniDUB.mka\" /sub=\"/home/andrew/ntfs/movies/Big.Fish.and.Begonia.2016/RUS Subs/Bazaar Zetsubou/Big.Fish.and.Begonia.2016.BDRemux.1080p.ass\" /sub=\"/home/andrew/ntfs/movies/Big.Fish.and.Begonia.2016/RUS Subs/YakuSub Studio/Big.Fish.and.Begonia.2016.BDRemux.1080p.ass\""
+  },
+  "expected_macos_writes": {
+    "/home/andrew/ntfs/movies/Big.Fish.and.Begonia.2016/20.command": "#!/bin/bash\n\"potplayer\" /same \"/home/andrew/ntfs/movies/Big.Fish.and.Begonia.2016/Big.Fish.and.Begonia.2016.BDRemux.1080p.mkv\" \"/home/andrew/ntfs/movies/Big.Fish.and.Begonia.2016/RUS Sound/Big.Fish.and.Begonia.2016.BDRemux.1080p.AniDUB.mka\" /sub=\"/home/andrew/ntfs/movies/Big.Fish.and.Begonia.2016/RUS Subs/Bazaar Zetsubou/Big.Fish.and.Begonia.2016.BDRemux.1080p.ass\" /sub=\"/home/andrew/ntfs/movies/Big.Fish.and.Begonia.2016/RUS Subs/YakuSub Studio/Big.Fish.and.Begonia.2016.BDRemux.1080p.ass\""
+  }
+}

@@ -131,6 +131,7 @@ fn resolve_player_kind(input: &FixtureInput) -> players::PlayerKind {
     match input.player.as_str() {
         "mpv" => players::PlayerKind::Mpv,
         "vlc" => players::PlayerKind::Vlc,
+        "potplayer" => players::PlayerKind::Potplayer,
         other => panic!("Unknown player kind in fixture: {other}"),
     }
 }

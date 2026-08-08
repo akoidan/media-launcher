@@ -8,15 +8,18 @@ use crate::media_scan::EpisodeFiles;
 use crate::os;
 
 mod mpv;
+mod potplayer;
 mod vlc;
 
 pub use mpv::MpvPlayer;
+pub use potplayer::PotPlayerPlayer;
 pub use vlc::VlcPlayer;
 
 #[derive(Copy, Clone, Debug, ValueEnum)]
 pub enum PlayerKind {
     Mpv,
     Vlc,
+    Potplayer,
 }
 
 impl PlayerKind {
@@ -24,6 +27,7 @@ impl PlayerKind {
         match self {
             PlayerKind::Mpv => "mpv",
             PlayerKind::Vlc => "vlc",
+            PlayerKind::Potplayer => "potplayer",
         }
     }
 }
@@ -46,15 +50,18 @@ pub fn resolve_player_with(
         None => {
             let mpv = os::resolve_program_name_with(fs_access, PlayerKind::Mpv.key());
             let vlc = os::resolve_program_name_with(fs_access, PlayerKind::Vlc.key());
+            let potplayer = os::resolve_program_name_with(fs_access, PlayerKind::Potplayer.key());
 
-            match (mpv, vlc) {
-                (Some(name), _) => (PlayerKind::Mpv, name),
-                (None, Some(name)) => (PlayerKind::Vlc, name),
-                (None, None) => {
+            match (mpv, vlc, potplayer) {
+                (Some(name), _, _) => (PlayerKind::Mpv, name),
+                (None, Some(name), _) => (PlayerKind::Vlc, name),
+                (None, None, Some(name)) => (PlayerKind::Potplayer, name),
+                (None, None, None) => {
                     return Err(anyhow!(
-                        "No supported players found in PATH (tried '{}' and '{}')",
+                        "No supported players found in PATH (tried '{}', '{}' and '{}')",
                         PlayerKind::Mpv.key(),
-                        PlayerKind::Vlc.key()
+                        PlayerKind::Vlc.key(),
+                        PlayerKind::Potplayer.key()
                     ));
                 }
             }
@@ -64,6 +71,7 @@ pub fn resolve_player_with(
     Ok(match kind {
         PlayerKind::Mpv => Box::new(MpvPlayer { program_name }),
         PlayerKind::Vlc => Box::new(VlcPlayer { program_name }),
+        PlayerKind::Potplayer => Box::new(PotPlayerPlayer { program_name }),
     })
 }
 
@@ -79,7 +87,7 @@ pub trait Player {
             .video
             .as_ref()
             .ok_or_else(|| anyhow!("Main video file not found"))?;
-        let mut cmd = format!("{} \"{}\"", self.program_name(), video.display());
+        let mut cmd = format!("\"{}\" \"{}\"", self.program_name(), video.display());
         self.append_audio_args(&mut cmd, &value.audio);
         self.append_subtitle_args(&mut cmd, &value.subtitles);
         self.append_font_args(&mut cmd, font_dir);
