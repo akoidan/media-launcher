@@ -32,8 +32,7 @@ Download `.elf` file from [releases](https://github.com/akoidan/media-launcher/r
 
 
 ## How to use
-- Download executable application file from [releases](https://github.com/akoidan/media-launcher/releases)
-- Run it either by opening it, either passing folder with TV series path as first argument
+- Run it either double-clicking or via cli with passing folder with TV series path as first argument
 - THe app will scan **TV season folder** and matche each episode with its external audio and subtitle tracks using smart `\d\d` pattern.
 - It will generater one launcher per episode (`01`, `02`, …):
   - **Linux:** `01.bash`, `02.bash`, …
