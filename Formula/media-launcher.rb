@@ -1,16 +1,16 @@
 class MediaLauncher < Formula
   desc "Matches audio/subtitle files to episodes and launches them in mpv or VLC"
   homepage "https://github.com/akoidan/media-launcher"
-  version "0.2.1"
+  version "0.2.2"
 
   on_arm do
-    url "https://github.com/akoidan/media-launcher/releases/download/v0.2.1/media-launcher-macos-arm64"
-    sha256 "ef19e678c824acb0358c216ccf1b7ac0ae23f0dd38f492e180b4fca52782a6e9"
+    url "https://github.com/akoidan/media-launcher/releases/download/v0.2.2/media-launcher-macos-arm64"
+    sha256 "e74817d3535c3d7e4882df22570a92cffd443ba47616ea3077fb6ed946cf93d8"
   end
 
   on_intel do
-    url "https://github.com/akoidan/media-launcher/releases/download/v0.2.1/media-launcher-macos-x86_64"
-    sha256 "de71636b3ff3064d9ed5c0fce7eb79ea6469456218ee8b2378c1fb43087d3575"
+    url "https://github.com/akoidan/media-launcher/releases/download/v0.2.2/media-launcher-macos-x86_64"
+    sha256 "d12f30a4b5ad2bff4b9feb9e0ba2941ca3defbeaafa80e0f5ce4b61581a07c4b"
   end
 
   def install
